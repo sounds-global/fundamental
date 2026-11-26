@@ -1,0 +1,14 @@
+@locale en
+---
+[validate]
+invalid_email = {$field} must be a valid email address
+invalid_url = {$field} must be a valid URL
+invalid_uuid = {$field} must be a valid UUID
+not_in_list = {$field} must be one of: {$allowed}
+not_unique = {$field} already exists
+pattern_mismatch = {$field} does not match the required pattern
+required = {$field} is required
+too_large = {$field} must be at most {$max} (got {$actual})
+too_long = {$field} must be at most {$max} characters (got {$actual})
+too_short = {$field} must be at least {$min} characters (got {$actual})
+too_small = {$field} must be at least {$min} (got {$actual})

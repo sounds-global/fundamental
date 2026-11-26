@@ -1,0 +1,37 @@
+[package]
+name = "fundamental_config"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Type-safe, multi-source configuration for the Fundamental framework (TOML files, environment layering, and env-var overrides)."
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+fundamental_manifest.workspace = true
+serde.workspace = true
+toml.workspace = true
+# The WHATWG parser `reqwest` dials with, so a loopback check reads a URL as the client does.
+url.workspace = true
+tracing.workspace = true
+dotenvy = "0.15"
+
+[dev-dependencies]
+tempfile.workspace = true
+tracing-subscriber.workspace = true
+tracing-test.workspace = true
+
+[features]
+default = ["std"]
+std = ["fundamental_core/std"]

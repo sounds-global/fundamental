@@ -1,0 +1,378 @@
+[package]
+name = "fundamental"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "A developer-friendly Rust framework for building production systems: models, errors, validation, multi-database persistence, config, encryption, and secrets."
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+
+fundamental_schema = { workspace = true, optional = true }
+fundamental_canonical = { workspace = true, optional = true }
+fundamental_text = { workspace = true, optional = true }
+fundamental_canonical_macros = { workspace = true, optional = true }
+fundamental_introspect = { workspace = true, optional = true }
+fundamental_db = { workspace = true, optional = true }
+fundamental_sql = { workspace = true, optional = true }
+fundamental_cql = { workspace = true, optional = true }
+fundamental_offline = { workspace = true, optional = true }
+fundamental_config = { workspace = true, optional = true }
+fundamental_manifest = { workspace = true, optional = true }
+fundamental_encryption = { workspace = true, optional = true }
+fundamental_secrets = { workspace = true, optional = true }
+fundamental_db_migrator = { workspace = true, optional = true }
+fundamental_i18n = { workspace = true, optional = true }
+fundamental_messages = { workspace = true, optional = true }
+fundamental_nats = { workspace = true, optional = true }
+fundamental_observability = { workspace = true, optional = true }
+fundamental_ws = { workspace = true, optional = true }
+fundamental_ws_client = { workspace = true, optional = true }
+fundamental_seed = { workspace = true, optional = true }
+fundamental_command = { workspace = true, optional = true }
+fundamental_sync = { workspace = true, optional = true }
+fundamental_keys = { workspace = true, optional = true }
+fundamental_auth = { workspace = true, optional = true }
+fundamental_authz = { workspace = true, optional = true }
+fundamental_sync_server = { workspace = true, optional = true }
+fundamental_build = { workspace = true, optional = true }
+fundamental_runtime = { workspace = true, optional = true }
+fundamental_inbox = { workspace = true, optional = true }
+fundamental_lease = { workspace = true, optional = true }
+fundamental_jobs = { workspace = true, optional = true }
+fundamental_server = { workspace = true, optional = true }
+fundamental_api = { workspace = true, optional = true }
+fundamental_web = { workspace = true, optional = true }
+fundamental_app = { workspace = true, optional = true }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+fundamental_native = { workspace = true, optional = true }
+
+[features]
+default = ["std"]
+std = ["fundamental_core/std", "fundamental_config?/std", "fundamental_db?/std"]
+
+schema = ["dep:fundamental_schema"]
+canonical = ["dep:fundamental_canonical", "dep:fundamental_canonical_macros"]
+text = ["dep:fundamental_text"]
+canonical-registry = ["canonical", "fundamental_canonical/registry"]
+proptest = ["fundamental_core/proptest"]
+slug-proposal = ["fundamental_core/slug-proposal"]
+retry = ["fundamental_core/retry"]
+introspect = ["dep:fundamental_introspect", "fundamental_app?/introspect"]
+manifest = ["dep:fundamental_manifest"]
+config = ["dep:fundamental_config", "manifest"]
+db = ["dep:fundamental_db", "fundamental_runtime?/db"]
+encryption = ["dep:fundamental_encryption"]
+secrets = ["dep:fundamental_secrets"]
+secrets-transit = ["secrets", "keys", "fundamental_secrets/transit-signer"]
+sql = ["dep:fundamental_sql", "db", "encryption", "fundamental_authz?/sql", "fundamental_db_migrator?/sql"]
+sql-test-support = ["sql", "fundamental_sql?/test-support", "fundamental_db_migrator?/test-support"]
+cql = ["dep:fundamental_cql", "db", "encryption", "fundamental_app?/cql", "fundamental_authz?/cql", "fundamental_db_migrator?/cql"]
+cql-test-support = ["cql", "fundamental_cql?/test-support", "fundamental_db_migrator?/test-support"]
+offline = ["dep:fundamental_offline", "db", "fundamental_authz?/offline", "fundamental_db_migrator?/offline"]
+migrator = ["dep:fundamental_db_migrator", "db"]
+i18n = ["dep:fundamental_i18n"]
+messages = ["dep:fundamental_messages", "fundamental_messages/leptos"]
+nats = ["dep:fundamental_nats", "secrets", "fundamental_runtime?/nats", "fundamental_app?/worker", "fundamental_sync?/nats", "fundamental_sync_server?/nats"]
+ws = ["dep:fundamental_ws", "fundamental_runtime?/ws", "fundamental_app?/socket"]
+ws_client = ["dep:fundamental_ws_client", "sync"]
+ws-client-vault = ["ws_client", "keys-hd", "fundamental_ws_client/vault-auth"]
+runtime = ["dep:fundamental_runtime"]
+lease = ["dep:fundamental_lease", "sql", "runtime"]
+jobs = ["dep:fundamental_jobs", "sql", "runtime"]
+jobs-test-support = ["jobs", "fundamental_jobs?/test-support"]
+inbox = ["dep:fundamental_inbox", "sql", "nats", "runtime", "command"]
+observability = ["dep:fundamental_observability"]
+observability-otlp = ["observability", "fundamental_observability/otlp"]
+observability-otlp-grpc = ["observability-otlp", "fundamental_observability/otlp-grpc"]
+seed = ["dep:fundamental_seed"]
+command = ["dep:fundamental_command"]
+sync = ["dep:fundamental_sync", "offline", "fundamental_db_migrator?/sync"]
+keys = ["dep:fundamental_keys"]
+keys-hsm = ["keys", "fundamental_keys/hsm"]
+keys-hd = ["keys", "fundamental_keys/keys-hd"]
+keys-os-keychain = ["keys", "fundamental_keys/os-keychain"]
+keys-hd-password = ["keys-hd", "fundamental_keys/keys-hd-password"]
+auth = ["dep:fundamental_auth", "config", "keys", "encryption"]
+authz-schema = ["dep:fundamental_authz"]
+authz = ["authz-schema", "db", "config", "fundamental_authz/config"]
+authz-service = ["authz", "nats", "fundamental_authz/service"]
+authz-server = ["authz", "server", "fundamental_authz/server"]
+sync_server = ["dep:fundamental_sync_server", "sync", "ws", "auth", "fundamental_app?/sync"]
+server = ["dep:fundamental_server", "auth", "fundamental_introspect?/ssr"]
+multipart = ["server", "fundamental_server/multipart"]
+api = ["dep:fundamental_api", "server", "fundamental_runtime?/api"]
+web = ["dep:fundamental_web", "fundamental_web/ssr", "server", "fundamental_runtime?/web"]
+app = ["dep:fundamental_app", "web", "runtime", "sql", "observability", "config", "i18n"]
+web-hydrate = ["dep:fundamental_web", "fundamental_web/hydrate"]
+web-live = ["fundamental_web/live", "ws_client", "offline"]
+native = ["dep:fundamental_native", "server", "web", "config", "keys-os-keychain"]
+native-sync-host = ["native", "fundamental_native?/sync-host", "sync", "ws_client"]
+native-deep-link = ["native", "fundamental_native?/deep-link"]
+native-push = ["native", "fundamental_native?/push"]
+native-loopback = ["native", "fundamental_native?/loopback"]
+native-client-identity = [
+    "native",
+    "keys",
+    "fundamental_native?/client-identity",
+    "fundamental_keys?/client-identity",
+]
+native-client-tpm = ["native-client-identity", "fundamental_keys?/client-tpm"]
+web-hydrate-tauri = ["web-hydrate", "fundamental_web/tauri"]
+build = ["dep:fundamental_build"]
+
+full = ["schema", "canonical-registry", "text", "introspect", "config", "db", "encryption", "secrets", "sql", "cql", "offline", "migrator", "i18n", "nats", "ws", "ws_client", "keys", "auth", "sync_server", "seed", "command", "sync", "build", "runtime", "lease", "inbox", "jobs", "observability", "server", "api", "web", "app", "native", "native-sync-host"]
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[workspace]
+resolver = "2"
+members = [
+    "cli",
+    "crates/*",
+    "crates/messages/fixture",
+    "crates/messages/app_fixture",
+    "vendor/sqlx-sqlite-stub",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.96"
+authors = ["Angelo Fornerino <angelo@sounds.global>"]
+license = "Apache-2.0"
+repository = "https://github.com/sounds-global/fundamental"
+publish = false
+
+[workspace.lints.rust]
+missing_docs = "warn"
+unsafe_code = "forbid"
+
+[workspace.lints.rustdoc]
+broken_intra_doc_links = "deny"
+private_intra_doc_links = "warn"
+unescaped_backticks = "warn"
+
+[workspace.lints.clippy]
+too_many_lines = "warn"
+cognitive_complexity = "warn"
+too_many_arguments = "warn"
+excessive_nesting = "warn"
+fn_params_excessive_bools = "warn"
+struct_excessive_bools = "warn"
+missing_errors_doc = "warn"
+missing_panics_doc = "warn"
+allow_attributes = "warn"
+allow_attributes_without_reason = "warn"
+
+[workspace.dependencies]
+fundamental = { path = "." }
+fundamental_core = { path = "crates/core" }
+fundamental_macros = { path = "crates/macros" }
+fundamental_schema = { path = "crates/schema" }
+fundamental_canonical = { path = "crates/canonical" }
+fundamental_text = { path = "crates/text" }
+fundamental_canonical_macros = { path = "crates/canonical_macros" }
+fundamental_introspect = { path = "crates/introspect", default-features = false }
+fundamental_cql = { path = "crates/cql" }
+fundamental_sql = { path = "crates/sql" }
+fundamental_db = { path = "crates/database" }
+fundamental_db_migrator = { path = "crates/database_migrator" }
+fundamental_encryption = { path = "crates/encryption" }
+fundamental_offline = { path = "crates/offline" }
+fundamental_config = { path = "crates/config" }
+fundamental_secrets = { path = "crates/secrets" }
+fundamental_i18n = { path = "crates/i18n" }
+fundamental_messages = { path = "crates/messages" }
+fundamental_messages_build = { path = "crates/messages_build" }
+fundamental_i18n_keys = { path = "crates/i18n_keys" }
+fundamental_nats = { path = "crates/nats" }
+fundamental_observability = { path = "crates/observability" }
+fundamental_ws = { path = "crates/ws" }
+fundamental_ws_wire = { path = "crates/ws_wire" }
+fundamental_ws_client = { path = "crates/ws_client" }
+fundamental_seed = { path = "crates/seed" }
+fundamental_command = { path = "crates/command" }
+fundamental_sync = { path = "crates/sync" }
+fundamental_keys = { path = "crates/keys" }
+fundamental_auth = { path = "crates/auth" }
+fundamental_authz = { path = "crates/authz" }
+fundamental_sync_server = { path = "crates/sync_server" }
+fundamental_build = { path = "crates/build" }
+fundamental_dev = { path = "crates/dev" }
+fundamental_manifest = { path = "crates/manifest" }
+fundamental_local = { path = "crates/local" }
+fundamental_runtime = { path = "crates/runtime" }
+fundamental_inbox = { path = "crates/inbox" }
+fundamental_lease = { path = "crates/lease" }
+fundamental_package = { path = "crates/package" }
+fundamental_jobs = { path = "crates/jobs" }
+fundamental_server = { path = "crates/server" }
+fundamental_api = { path = "crates/api" }
+fundamental_web = { path = "crates/web", default-features = false }
+fundamental_app = { path = "crates/app" }
+fundamental_native = { path = "crates/native" }
+fundamental_test_containers = { path = "crates/test_containers" }
+fundamental_test_browser = { path = "crates/test_browser" }
+fundamental_test_render = { path = "crates/test_render" }
+fundamental_bench = { path = "crates/bench", default-features = false }
+
+leptos = { version = "0.8", default-features = false }
+send_wrapper = { version = "0.6", features = ["futures"] }
+clap = { version = "4.6", features = ["derive", "env", "wrap_help", "string"] }
+syn = { version = "2.0", features = ["full", "extra-traits"] }
+quote = "1.0"
+proc-macro2 = "1.0"
+proc-macro-crate = "3"
+darling = "0.23"
+unicode-normalization = "0.1"
+roxmltree = "0.21"
+console = "0.16"
+dialoguer = "0.12"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_urlencoded = "0.7"
+toml = "1.1"
+toml_edit = "0.25"
+regex = "1.11"
+tracing = { version = "0.1", features = ["log"] }
+tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
+tracing-test = "0.2"
+
+opentelemetry = "0.32"
+opentelemetry_sdk = { version = "0.32", features = ["rt-tokio"] }
+opentelemetry-otlp = { version = "0.32", default-features = false, features = ["http-proto", "reqwest-blocking-client", "reqwest-rustls", "trace", "logs", "internal-logs"] }
+opentelemetry-appender-tracing = "0.32"
+tracing-opentelemetry = "0.33"
+trybuild = "1.0"
+proptest = "1"
+criterion = { version = "0.8", default-features = false, features = ["cargo_bench_support"] }
+# Exact: the gungraun-runner binary must be the same version.
+gungraun = "=0.20.0"
+web-time = "1.1"
+wasm-bindgen-test = "0.3"
+web-sys = { version = "0.3", features = ["console"] }
+parking_lot = "0.12"
+chrono = "0.4"
+# Exact: its tz database is part of a calendar's fingerprint.
+chrono-tz = { version = "=0.10.4", default-features = false, features = ["std"] }
+hdrhistogram = "7.5"
+rusqlite = { version = "0.40.1", features = ["bundled"] }
+sqlite-wasm-rs = { version = "0.5", default-features = false }
+sqlite-wasm-vfs = "0.2"
+tempfile = "3.27"
+sqlx = "0.9"
+uuid = { version = "1.19", features = ["serde"] }
+# No default features: they pull protobuf 2.x (RUSTSEC-2024-0437).
+prometheus = { version = "0.13", default-features = false }
+tokio = { version = "1.43", features = ["full"] }
+zeroize = { version = "1.8", features = ["derive"] }
+subtle = { version = "2.6", default-features = false }
+form_urlencoded = "1.2"
+scylla = { version = "1.8", features = ["chrono-04", "rustls-023"] }
+rustls = "0.23"
+rustls-native-certs = "0.8"
+rustc-hash = "2.1"
+testcontainers = { version = "0.27", default-features = false, features = ["aws-lc-rs", "reusable-containers"] }
+bollard = "0.20"
+base64 = "0.22"
+ring = "0.17"
+aes-gcm = { version = "0.10", default-features = false, features = ["aes", "alloc"] }
+blake3 = { version = "1", default-features = false }
+deunicode = "1.6"
+getrandom = "0.2"
+chacha20poly1305 = { version = "0.10", default-features = false, features = ["alloc"] }
+ed25519-dalek = "2.2"
+# Exact: 4.1.3 never installs the platform store; unpin when fixed upstream.
+keyring = "=4.1.2"
+cryptoki = "0.8"
+# aws_lc_rs, not rust_crypto: rsa 0.9 has RUSTSEC-2023-0071.
+jsonwebtoken = { version = "10.4", default-features = false, features = ["aws_lc_rs", "use_pem"] }
+async-trait = "0.1"
+arc-swap = "1.7"
+async-nats = { version = "0.49", default-features = false, features = ["server_2_10", "server_2_11", "server_2_12", "server_2_14", "service", "aws-lc-rs", "jetstream", "nkeys", "crypto", "object-store", "kv", "websockets", "nuid"] }
+nkeys = "0.4"
+url = "2.5"
+data-encoding = "2.11"
+bytes = "1.12"
+futures = "0.3"
+hydration_context = "0.3.1"
+any_spawner = { version = "0.3", features = ["tokio"] }
+futures-core = "0.3"
+multer = "3.1"
+tokio-tungstenite = { version = "0.29", default-features = false, features = ["handshake"] }
+icu_decimal = { version = "2.3", default-features = false, features = ["compiled_data", "alloc"] }
+fixed_decimal = { version = "0.7", default-features = false }
+icu_locale_core = { version = "2.3", default-features = false }
+# Exact: the relative-word table is CLDR 48.2.1, as 2.3.0 carries.
+icu_datetime = { version = "=2.3.0", default-features = false, features = ["compiled_data"] }
+icu_time = { version = "=2.3.0", default-features = false, features = ["compiled_data"] }
+icu_calendar = { version = "=2.3.0", default-features = false, features = ["compiled_data"] }
+icu_plurals = { version = "=2.3.0", default-features = false, features = ["compiled_data"] }
+icu_provider = { version = "2.3", default-features = false, features = ["sync"] }
+reqwest = { version = "0.13", default-features = false, features = ["json", "rustls"] }
+rcgen = { version = "0.14", default-features = false, features = ["aws_lc_rs", "pem"] }
+x509-parser = "0.18"
+rustls-webpki = { version = "0.103", default-features = false, features = ["std", "aws-lc-rs"] }
+rustls-pki-types = { version = "1", features = ["std"] }
+time = { version = "0.3", default-features = false, features = ["std"] }
+listenfd = "1.0.2"
+tar = { version = "0.4.45", default-features = false }
+zstd = { version = "0.13", default-features = false }
+rustix = { version = "1", default-features = false, features = ["std", "process"] }
+hickory-proto = { version = "=0.26.3", default-features = false, features = ["std"] }
+tauri = "2.11"
+tauri-build = "2.6"
+tauri-plugin-deep-link = "2"
+tauri-plugin-single-instance = "2"
+tauri-plugin-opener = "2"
+axum = "0.8"
+http-body-util = "0.1"
+hyper = { version = "1", features = ["server", "http1", "http2"] }
+hyper-util = { version = "0.1", features = ["server-auto", "server-graceful", "tokio", "service", "http1", "http2"] }
+tower = "0.5"
+tower-http = { version = "0.7", features = [
+    "cors",
+    "limit",
+    "timeout",
+    "trace",
+    "catch-panic",
+    "sensitive-headers",
+    "request-id",
+    "util",
+] }
+
+[profile.dev]
+debug = "line-tables-only"
+split-debuginfo = "unpacked"
+
+[profile.dev.package."*"]
+debug = false
+
+[profile.dev.build-override]
+debug = false
+
+[profile.release]
+debug = false
+incremental = false
+lto = false
+codegen-units = 16
+
+[profile.bench-live]
+inherits = "release"
+debug-assertions = true
+
+[patch.crates-io]
+# sqlx-sqlite would pull a libsqlite3-sys that conflicts with rusqlite; never enabled.
+sqlx-sqlite = { path = "vendor/sqlx-sqlite-stub" }

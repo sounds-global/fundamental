@@ -1,0 +1,41 @@
+error[E0599]: `HolderAccount` is not an iterator
+  --> tests/compile_fail/no_unpinned_count_of_a_composite_key.rs:24:28
+   |
+15 | struct HolderAccount {
+   | -------------------- associated function or constant `count` not found for this struct because it doesn't satisfy `HolderAccount: Iterator`
+...
+24 |     let _ = HolderAccount::count(pool).await;
+   |                            ^^^^^ `HolderAccount` is not an iterator
+   |
+   = note: the following trait bounds were not satisfied:
+           `HolderAccount: Iterator`
+           which is required by `&mut HolderAccount: Iterator`
+note: the trait `Iterator` must be implemented
+  --> $RUST/core/src/iter/traits/iterator.rs
+   |
+   | pub const trait Iterator {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: items from traits can only be used if the trait is implemented and in scope
+   = note: the following traits define an item `count`, perhaps you need to implement one of them:
+           candidate #1: `Iterator`
+           candidate #2: `QueryExecutor`
+           candidate #3: `RepositoryAggregate`
+           candidate #4: `RepositoryTransactionAggregate`
+           candidate #5: `event_listener::notify::NotificationPrivate`
+           candidate #6: `fallible_iterator::FallibleIterator`
+           candidate #7: `fallible_streaming_iterator::FallibleStreamingIterator`
+           candidate #8: `futures_util::stream::stream::StreamExt`
+
+error[E0599]: no associated function or constant named `update_where` found for struct `HolderAccount` in the current scope
+  --> tests/compile_fail/no_unpinned_count_of_a_composite_key.rs:28:28
+   |
+15 | struct HolderAccount {
+   | -------------------- associated function or constant `update_where` not found for this struct
+...
+28 |     let _ = HolderAccount::update_where(pool);
+   |                            ^^^^^^^^^^^^ associated function or constant not found in `HolderAccount`
+   |
+   = help: items from traits can only be used if the trait is implemented and in scope
+   = note: the following traits define an item `update_where`, perhaps you need to implement one of them:
+           candidate #1: `QueryExecutor`
+           candidate #2: `RepositoryTransactionQuery`

@@ -1,0 +1,9 @@
+error[E0599]: no method named `blocking` found for struct `ActionHook<Read, QueryOperation, fundamental_web::async_ui::local_source::LocalSource<fundamental_web::async_ui::no_query_source::NoQuerySource>>` in the current scope
+  --> tests/ui/a_local_query_cannot_block.rs:14:41
+   |
+14 |     let _ = actions::use_read().local().blocking();
+   |                                         ^^^^^^^^ method not found in `ActionHook<Read, QueryOperation, fundamental_web::async_ui::local_source::LocalSource<fundamental_web::async_ui::no_query_source::NoQuerySource>>`
+   |
+   = note: the method was found for
+           - `ActionHook<M, O, fundamental_web::async_ui::action_query_source::ActionQuerySource<F>, P>`
+           - `ActionHook<M, O, fundamental_web::async_ui::no_query_source::NoQuerySource, P>`

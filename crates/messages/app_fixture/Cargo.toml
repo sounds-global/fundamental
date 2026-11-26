@@ -1,0 +1,19 @@
+[package]
+name = "fundamental_messages_app_fixture"
+version.workspace = true
+edition.workspace = true
+publish = false
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "An app's own messages, saying another crate's messages its own way, for the catalog's own tests."
+
+[lints]
+workspace = true
+
+[dependencies]
+fundamental_messages = { path = ".." }
+
+[build-dependencies]
+fundamental_messages_build = { path = "../../messages_build" }

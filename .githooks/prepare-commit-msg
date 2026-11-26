@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Signs off every commit under the Developer Certificate of Origin (DCO), as `git commit -s`
+# would, so the pull-request check never refuses a commit for a missing sign-off.
+set -euo pipefail
+
+MSG_FILE="$1"
+NAME="$(git config user.name || true)"
+EMAIL="$(git config user.email || true)"
+[ -n "$NAME" ] && [ -n "$EMAIL" ] || exit 0
+
+git interpret-trailers --in-place --if-exists addIfDifferent \
+    --trailer "Signed-off-by: $NAME <$EMAIL>" "$MSG_FILE"

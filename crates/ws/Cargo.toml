@@ -1,0 +1,47 @@
+[package]
+name = "fundamental_ws"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "WebSocket server for the Fundamental framework: action-routed, typed message handlers over a single tokio-tungstenite seam."
+keywords = ["websocket", "server", "tokio", "messaging", "async"]
+categories = ["asynchronous", "network-programming", "web-programming"]
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[features]
+test-support = ["tokio-tungstenite/connect"]
+
+[dependencies]
+fundamental_core = { workspace = true, features = ["json"] }
+fundamental_macros.workspace = true
+fundamental_ws_wire.workspace = true
+tokio = { workspace = true }
+tokio-tungstenite.workspace = true
+futures.workspace = true
+tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uuid = { workspace = true, features = ["v4"] }
+prometheus.workspace = true
+
+[dev-dependencies]
+fundamental_ws = { path = ".", features = ["test-support"] }
+fundamental_observability = { workspace = true, features = ["testing"] }
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "test-util"] }
+tokio-tungstenite = { workspace = true, features = ["connect"] }
+tracing-subscriber.workspace = true
+tracing-test.workspace = true
+fundamental_nats.workspace = true

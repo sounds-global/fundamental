@@ -1,0 +1,11 @@
+error[E0599]: no method named `inner_mut` found for mutable reference `&mut EffectTransaction<'_>` in the current scope
+  --> tests/compile_fail/inbox_handler_reaches_the_connection.rs:31:16
+   |
+31 |     let _ = tx.inner_mut();
+   |                ^^^^^^^^^
+   |
+help: there is a method `insert` with a similar name, but with different arguments
+  --> $WORKSPACE/crates/database/src/transaction/repository_transaction.rs
+   |
+   |     fn insert(&mut self, model: &M) -> impl Future<Output = DatabaseResult<M>> + Send;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

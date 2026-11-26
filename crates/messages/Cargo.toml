@@ -1,0 +1,27 @@
+[package]
+name = "fundamental_messages"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "A crate's messages said in the reader's language: the typed functions its build generates return a Message, formatted from the crate's compiled MessageFormat 2 catalogs."
+
+[lints]
+workspace = true
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+mf2-catalog = { version = "3", features = ["static-bytes", "server-data"] }
+mf2-runtime = "3"
+mf2-fn-number = "3"
+mf2-host-std = "3"
+tracing.workspace = true
+leptos = { workspace = true, optional = true }
+
+[features]
+default = []
+leptos = ["dep:leptos"]

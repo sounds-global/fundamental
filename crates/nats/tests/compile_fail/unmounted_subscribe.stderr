@@ -1,0 +1,23 @@
+error[E0277]: the message `Unmounted` is not mounted in this app
+  --> tests/compile_fail/unmounted_subscribe.rs:26:48
+   |
+26 | async fn on_unmounted(message: ReceivedMessage<Unmounted>) -> NatsResult<()> {
+   |                                                ^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `MountedMessage` is not implemented for `Unmounted`
+  --> tests/compile_fail/unmounted_subscribe.rs:19:1
+   |
+19 | struct Unmounted {
+   | ^^^^^^^^^^^^^^^^
+   = note: list it in `mount_messages! { ... }` so this app can subscribe to it
+help: the trait `MountedMessage` is implemented for `Mounted`
+  --> tests/compile_fail/unmounted_subscribe.rs:23:1
+   |
+23 | mount_messages! { Mounted }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `__fundamental_assert_mounted`
+  --> tests/compile_fail/unmounted_subscribe.rs:25:1
+   |
+25 | #[subscribe]
+   | ^^^^^^^^^^^^ required by this bound in `__fundamental_assert_mounted`
+   = note: this error originates in the macro `mount_messages` which comes from the expansion of the attribute macro `subscribe` (in Nightly builds, run with -Z macro-backtrace for more info)

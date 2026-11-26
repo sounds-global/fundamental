@@ -1,0 +1,5 @@
+error: `staff_acount_id` is not a column of `Membership`; an index names the model's own columns
+  --> tests/compile_fail/no_index_on_an_unknown_column.rs:12:64
+   |
+12 | #[model(sql, index(name = "memberships_by_account", columns = ["staff_acount_id"]))]
+   |                                                                ^^^^^^^^^^^^^^^^^

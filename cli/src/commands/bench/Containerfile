@@ -1,0 +1,10 @@
+# The machine `fun bench` counts instructions on whenever a container engine is here: the project's
+# Rust toolchain, valgrind, and the gungraun runner its benches are built against.
+ARG RUST=1.96.0
+FROM docker.io/library/rust:${RUST}-trixie
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends valgrind \
+ && rm -rf /var/lib/apt/lists/*
+ARG GUNGRAUN=0.20.0
+RUN cargo install gungraun-runner --version ${GUNGRAUN} --locked \
+ && rm -rf /usr/local/cargo/registry

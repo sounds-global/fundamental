@@ -1,0 +1,52 @@
+[package]
+name = "fundamental_offline"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Offline database abstraction for the Fundamental framework: native SQLite everywhere, with sqlite-wasm-rs + IndexedDB VFS on wasm32, behind one interface."
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_db.workspace = true
+fundamental_macros.workspace = true
+rusqlite.workspace = true
+futures.workspace = true
+tracing.workspace = true
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+tokio = { workspace = true, features = ["rt"] }
+
+[dev-dependencies]
+tracing-subscriber.workspace = true
+tracing-test.workspace = true
+
+[target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
+tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros"] }
+criterion.workspace = true
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+sqlite-wasm-rs.workspace = true
+sqlite-wasm-vfs.workspace = true
+
+[target.'cfg(target_arch = "wasm32")'.dev-dependencies]
+wasm-bindgen-test = { workspace = true }
+web-time.workspace = true
+web-sys.workspace = true
+
+[[bench]]
+name = "store"
+harness = false

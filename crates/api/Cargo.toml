@@ -1,0 +1,57 @@
+[package]
+name = "fundamental_api"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "axum-backed HTTP API surface for the Fundamental framework: the one place axum/tower live, plugged into the framework-neutral ServerBackend seam."
+keywords = ["http", "api", "axum", "server", "async"]
+categories = ["web-programming", "asynchronous", "network-programming"]
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+fundamental_observability.workspace = true
+fundamental_core.workspace = true
+fundamental_server.workspace = true
+fundamental_auth.workspace = true
+axum.workspace = true
+tower.workspace = true
+tower-http.workspace = true
+tokio = { workspace = true, features = ["net", "rt", "macros", "signal", "time"] }
+bytes.workspace = true
+futures-core.workspace = true
+http-body-util.workspace = true
+hyper.workspace = true
+hyper-util.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+fundamental_macros.workspace = true
+fundamental_auth.workspace = true
+fundamental_core.workspace = true
+bytes.workspace = true
+futures = { workspace = true }
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "time", "test-util", "sync"] }
+reqwest = { workspace = true, features = ["stream", "http2", "form"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+tempfile.workspace = true
+tracing-subscriber.workspace = true
+tracing-test.workspace = true
+# The OpenTelemetry layer and a readable exporter, for the boundary's no-caller-value test.
+fundamental_observability = { workspace = true, features = ["otlp", "testing"] }
+opentelemetry.workspace = true
+opentelemetry_sdk = { workspace = true, features = ["testing"] }
+tracing-opentelemetry.workspace = true

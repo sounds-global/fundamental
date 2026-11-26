@@ -1,0 +1,13 @@
+error: an inbox handler takes exactly `(tx: &mut EffectTransaction<'_>, event: &Inbound<M>)` and returns `Result<(), E>`: the transaction is its only way to write, so its effect commits with the record that it ran
+  --> tests/compile_fail/inbox_handler_with_state.rs:31:5
+   |
+31 |     event: &Inbound<DepositPaid>,
+   |     ^^^^^
+
+warning: unused imports: `EffectTransaction` and `Inbound`
+ --> tests/compile_fail/inbox_handler_with_state.rs:4:25
+  |
+4 | use fundamental_inbox::{EffectTransaction, Inbound};
+  |                         ^^^^^^^^^^^^^^^^^  ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default

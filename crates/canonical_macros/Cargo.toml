@@ -1,0 +1,29 @@
+[package]
+name = "fundamental_canonical_macros"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "embed_canonical!: canonical bytes compiled into a binary, refused at build time unless they are canonical and match the digest written beside them."
+keywords = ["jcs", "rfc8785", "include-bytes", "digest"]
+categories = ["encoding", "development-tools::procedural-macro-helpers"]
+
+[lib]
+proc-macro = true
+
+[lints]
+workspace = true
+
+[dependencies]
+fundamental_canonical = { workspace = true, features = ["registry"] }
+syn.workspace = true
+quote.workspace = true
+proc-macro2.workspace = true
+proc-macro-crate.workspace = true
+
+[dev-dependencies]
+serde = { workspace = true, features = ["derive"] }
+proptest.workspace = true

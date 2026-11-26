@@ -1,0 +1,5 @@
+error: `was` names the column's name before, which no other column may have
+  --> tests/compile_fail/no_was_naming_another_column.rs:16:5
+   |
+16 |     title: String,
+   |     ^^^^^

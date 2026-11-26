@@ -1,0 +1,25 @@
+error[E0599]: `HolderAccount` is not an iterator
+  --> tests/compile_fail/no_find_by_partial_key.rs:19:28
+   |
+ 9 | struct HolderAccount {
+   | -------------------- associated function or constant `find` not found for this struct because it doesn't satisfy `HolderAccount: Iterator`
+...
+19 |     let _ = HolderAccount::find(pool, &"eu".to_string()).await;
+   |                            ^^^^ `HolderAccount` is not an iterator
+   |
+   = note: the following trait bounds were not satisfied:
+           `HolderAccount: Iterator`
+           which is required by `&mut HolderAccount: Iterator`
+note: the trait `Iterator` must be implemented
+  --> $RUST/core/src/iter/traits/iterator.rs
+   |
+   | pub const trait Iterator {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: items from traits can only be used if the trait is implemented and in scope
+   = note: the following traits define an item `find`, perhaps you need to implement one of them:
+           candidate #1: `Iterator`
+           candidate #2: `KeyedRepository`
+           candidate #3: `KeyedRepositoryTransaction`
+           candidate #4: `fallible_iterator::FallibleIterator`
+           candidate #5: `fallible_streaming_iterator::FallibleStreamingIterator`
+           candidate #6: `http::header::map::as_header_name::Sealed`

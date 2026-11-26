@@ -1,0 +1,123 @@
+[package]
+name = "fundamental_bench"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Benchmarks that prove the framework's hot paths and its stability: instruction counts checked against a committed baseline, wall-clock benches, load, soak and fault runs."
+publish = false
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[features]
+default = []
+workloads = [
+    "dep:fundamental_test_render",
+    "dep:leptos",
+    "dep:fundamental_server",
+    "dep:fundamental_api",
+    "dep:fundamental_web",
+    "dep:fundamental_sql",
+    "dep:fundamental_cql",
+    "dep:fundamental_db",
+    "dep:fundamental_sync",
+    "dep:fundamental_ws_wire",
+    "dep:fundamental_config",
+    "dep:fundamental_manifest",
+    "dep:fundamental_messages_fixture",
+    "dep:tempfile",
+]
+live = [
+    "workloads",
+    "dep:fundamental_test_containers",
+    "dep:fundamental_jobs",
+    "dep:fundamental_offline",
+    "dep:fundamental_db_migrator",
+    "dep:fundamental_encryption",
+    "dep:fundamental_runtime",
+    "dep:fundamental_nats",
+    "dep:fundamental_auth",
+    "dep:fundamental_sync_server",
+    "dep:fundamental_ws",
+    "dep:fundamental_ws_client",
+    "dep:jsonwebtoken",
+    "dep:reqwest",
+    "dep:chrono",
+]
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+hdrhistogram.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "time", "sync"] }
+tracing.workspace = true
+
+fundamental_test_render = { workspace = true, optional = true }
+leptos = { workspace = true, features = ["ssr"], optional = true }
+fundamental_server = { workspace = true, optional = true }
+fundamental_api = { workspace = true, optional = true }
+fundamental_web = { workspace = true, features = ["ssr"], optional = true }
+fundamental_sql = { workspace = true, features = ["internal-benches"], optional = true }
+fundamental_cql = { workspace = true, features = ["internal-benches"], optional = true }
+fundamental_db = { workspace = true, optional = true }
+fundamental_sync = { workspace = true, optional = true }
+fundamental_ws_wire = { workspace = true, optional = true }
+fundamental_config = { workspace = true, optional = true }
+fundamental_manifest = { workspace = true, optional = true }
+fundamental_messages_fixture = { path = "../messages/fixture", optional = true }
+tempfile = { workspace = true, optional = true }
+
+# Normal, not dev-dependencies: this crate is dev-only and no engine depends on it.
+fundamental_test_containers = { workspace = true, features = ["sql", "nats"], optional = true }
+fundamental_jobs = { workspace = true, optional = true }
+fundamental_offline = { workspace = true, optional = true }
+fundamental_db_migrator = { workspace = true, features = ["sql"], optional = true }
+fundamental_encryption = { workspace = true, optional = true }
+fundamental_runtime = { workspace = true, features = ["db"], optional = true }
+fundamental_nats = { workspace = true, optional = true }
+fundamental_auth = { workspace = true, optional = true }
+fundamental_sync_server = { workspace = true, optional = true }
+fundamental_ws = { workspace = true, optional = true }
+fundamental_ws_client = { workspace = true, optional = true }
+jsonwebtoken = { workspace = true, optional = true }
+reqwest = { workspace = true, optional = true }
+chrono = { workspace = true, optional = true }
+
+[dev-dependencies]
+fundamental_bench = { path = ".", features = ["workloads"] }
+criterion.workspace = true
+gungraun.workspace = true
+tracing-subscriber = { workspace = true, features = ["env-filter", "fmt"] }
+tempfile.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "time"] }
+
+[[bench]]
+name = "instructions"
+harness = false
+
+[[bench]]
+name = "wall"
+harness = false
+
+[[bench]]
+name = "load"
+harness = false
+required-features = ["live"]
+
+[[bench]]
+name = "soak"
+harness = false
+required-features = ["live"]
+
+[[bench]]
+name = "fault"
+harness = false
+required-features = ["live"]

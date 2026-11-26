@@ -1,0 +1,28 @@
+[package]
+name = "fundamental_test_browser"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "A real browser for a workspace's tests: a pinned headless Chrome driven over the DevTools protocol, with isolated contexts, a virtual WebAuthn authenticator, scripting switched off, the accessibility tree, and every request and console line the page made."
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+base64.workspace = true
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+fundamental_test_containers = { workspace = true, features = ["browser"] }
+futures = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "sync", "time"] }
+tokio-tungstenite = { workspace = true, features = ["connect"] }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }

@@ -1,0 +1,173 @@
+{
+  "parent": "1a9f9db247886a30f63b44ca5fa64159d57c9428a2fa63df4e7b8a80c6215460",
+  "tables": {
+    "fundamental_jobs": {
+      "columns": [
+        {
+          "name": "job_id",
+          "type": "UUID"
+        },
+        {
+          "name": "bucket",
+          "type": "INT2"
+        },
+        {
+          "name": "kind",
+          "type": "TEXT"
+        },
+        {
+          "name": "subject",
+          "type": "TEXT"
+        },
+        {
+          "name": "due_at",
+          "type": "TIMESTAMPTZ"
+        },
+        {
+          "name": "next_attempt_at",
+          "type": "TIMESTAMPTZ"
+        },
+        {
+          "name": "attempts",
+          "type": "INT8"
+        },
+        {
+          "name": "last_error",
+          "type": "TEXT",
+          "nullable": true
+        },
+        {
+          "name": "fired_at",
+          "type": "TIMESTAMPTZ",
+          "nullable": true
+        },
+        {
+          "name": "outbox_seal",
+          "type": "BYTEA"
+        },
+        {
+          "name": "outbox_set_aside_at",
+          "type": "TIMESTAMPTZ",
+          "nullable": true
+        },
+        {
+          "name": "outbox_set_aside_reason",
+          "type": "TEXT",
+          "nullable": true
+        },
+        {
+          "name": "outbox_set_aside_seal",
+          "type": "BYTEA",
+          "nullable": true
+        },
+        {
+          "name": "outbox_skip_until",
+          "type": "TIMESTAMPTZ",
+          "nullable": true
+        }
+      ],
+      "key": [
+        {
+          "columns": [
+            "job_id"
+          ],
+          "split": "hash"
+        }
+      ],
+      "indexes": {
+        "fundamental_jobs_claim": {
+          "key": [
+            {
+              "columns": [
+                "bucket"
+              ],
+              "split": "asc"
+            },
+            {
+              "columns": [
+                "next_attempt_at"
+              ],
+              "split": "asc"
+            }
+          ],
+          "condition": "fired_at IS NULL AND outbox_set_aside_at IS NULL AND outbox_skip_until IS NULL"
+        },
+        "fundamental_jobs_fired": {
+          "key": [
+            {
+              "columns": [
+                "bucket"
+              ],
+              "split": "asc"
+            },
+            {
+              "columns": [
+                "fired_at"
+              ],
+              "split": "asc"
+            }
+          ],
+          "condition": "fired_at IS NOT NULL"
+        },
+        "fundamental_jobs_overdue": {
+          "key": [
+            {
+              "columns": [
+                "bucket"
+              ],
+              "split": "asc"
+            },
+            {
+              "columns": [
+                "due_at"
+              ],
+              "split": "asc"
+            }
+          ],
+          "condition": "fired_at IS NULL"
+        },
+        "fundamental_jobs_set_aside": {
+          "key": [
+            {
+              "columns": [
+                "bucket"
+              ],
+              "split": "asc"
+            },
+            {
+              "columns": [
+                "outbox_set_aside_at"
+              ],
+              "split": "asc"
+            }
+          ],
+          "condition": "outbox_set_aside_at IS NOT NULL"
+        },
+        "fundamental_jobs_skipped": {
+          "key": [
+            {
+              "columns": [
+                "bucket"
+              ],
+              "split": "asc"
+            },
+            {
+              "columns": [
+                "outbox_skip_until"
+              ],
+              "split": "asc"
+            }
+          ],
+          "condition": "fired_at IS NULL AND outbox_set_aside_at IS NULL AND outbox_skip_until IS NOT NULL"
+        }
+      },
+      "checks": {
+        "fundamental_jobs_bucket": "bucket BETWEEN 0 AND 63",
+        "fundamental_jobs_fired_not_before_due": "fired_at IS NULL OR fired_at >= due_at",
+        "fundamental_jobs_kind": "kind ~ '^[a-z][a-z0-9._-]{0,63}$'",
+        "fundamental_jobs_last_error": "last_error IS NULL OR char_length(last_error) <= 2000",
+        "fundamental_jobs_subject": "char_length(subject) BETWEEN 1 AND 256 AND subject ~ '^[A-Za-z0-9._:/-]+$'"
+      }
+    }
+  }
+}

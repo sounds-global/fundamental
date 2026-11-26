@@ -1,0 +1,2 @@
+crates/canonical/tests/rfc8785/** -text
+crates/canonical_macros/tests/fixtures/** -text

@@ -1,0 +1,5 @@
+error: `constraint` says a `CONSTRAINT … UNIQUE` made the index; it is `unique` too
+  --> tests/compile_fail/no_constraint_index_that_is_not_unique.rs:11:35
+   |
+11 | #[model(sql, table = "customers", index(name = "customers_code", columns = ["code hash"], constraint))]
+   |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,0 +1,5 @@
+error[E0599]: no method named `commit` found for mutable reference `&mut EffectTransaction<'_>` in the current scope
+  --> tests/compile_fail/inbox_handler_commits_early.rs:33:8
+   |
+33 |     tx.commit().await?;
+   |        ^^^^^^ method not found in `&mut EffectTransaction<'_>`

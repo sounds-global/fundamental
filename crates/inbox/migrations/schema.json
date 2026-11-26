@@ -1,0 +1,190 @@
+{
+  "parent": "fa6124da71c370d9cb8610da15e947e566d99619fad375fc64be9723f5ed3db9",
+  "tables": {
+    "fundamental_inbox": {
+      "columns": [
+        {
+          "name": "effect",
+          "type": "TEXT"
+        },
+        {
+          "name": "event_id",
+          "type": "UUID"
+        },
+        {
+          "name": "sweep_bucket",
+          "type": "INT4"
+        },
+        {
+          "name": "payload_digest",
+          "type": "BYTEA"
+        },
+        {
+          "name": "stream",
+          "type": "TEXT"
+        },
+        {
+          "name": "consumer",
+          "type": "TEXT"
+        },
+        {
+          "name": "stream_sequence",
+          "type": "INT8"
+        },
+        {
+          "name": "processed_at",
+          "type": "TIMESTAMPTZ"
+        }
+      ],
+      "key": [
+        {
+          "columns": [
+            "effect",
+            "event_id"
+          ],
+          "split": "hash"
+        }
+      ],
+      "indexes": {
+        "fundamental_inbox_by_age": {
+          "key": [
+            {
+              "columns": [
+                "effect",
+                "sweep_bucket"
+              ],
+              "split": "hash"
+            },
+            {
+              "columns": [
+                "processed_at"
+              ],
+              "split": "asc"
+            }
+          ]
+        }
+      },
+      "checks": {
+        "fundamental_inbox_bucket_range": "sweep_bucket BETWEEN 0 AND 63",
+        "fundamental_inbox_digest_length": "octet_length(payload_digest) = 32",
+        "fundamental_inbox_effect_length": "char_length(effect) BETWEEN 1 AND 100"
+      }
+    },
+    "fundamental_inbox_effects": {
+      "columns": [
+        {
+          "name": "effect",
+          "type": "TEXT"
+        },
+        {
+          "name": "handler",
+          "type": "TEXT"
+        },
+        {
+          "name": "covered_from",
+          "type": "TIMESTAMPTZ",
+          "nullable": true
+        },
+        {
+          "name": "covered_from_set_at",
+          "type": "TIMESTAMPTZ",
+          "nullable": true
+        },
+        {
+          "name": "delete_below",
+          "type": "TIMESTAMPTZ",
+          "nullable": true
+        },
+        {
+          "name": "registered_at",
+          "type": "TIMESTAMPTZ"
+        }
+      ],
+      "key": [
+        {
+          "columns": [
+            "effect"
+          ],
+          "split": "hash"
+        }
+      ],
+      "checks": {
+        "fundamental_inbox_effects_effect_length": "char_length(effect) BETWEEN 1 AND 100"
+      }
+    },
+    "fundamental_inbox_parked": {
+      "columns": [
+        {
+          "name": "effect",
+          "type": "TEXT"
+        },
+        {
+          "name": "stream",
+          "type": "TEXT"
+        },
+        {
+          "name": "stream_created_at",
+          "type": "TIMESTAMPTZ"
+        },
+        {
+          "name": "stream_sequence",
+          "type": "INT8"
+        },
+        {
+          "name": "event_id",
+          "type": "UUID",
+          "nullable": true
+        },
+        {
+          "name": "reason",
+          "type": "TEXT"
+        },
+        {
+          "name": "error_code",
+          "type": "TEXT",
+          "nullable": true
+        },
+        {
+          "name": "delivered",
+          "type": "INT8"
+        },
+        {
+          "name": "parked_at",
+          "type": "TIMESTAMPTZ"
+        }
+      ],
+      "key": [
+        {
+          "columns": [
+            "effect",
+            "stream",
+            "stream_created_at",
+            "stream_sequence"
+          ],
+          "split": "hash"
+        }
+      ],
+      "indexes": {
+        "fundamental_inbox_parked_by_age": {
+          "key": [
+            {
+              "columns": [
+                "effect"
+              ],
+              "split": "hash"
+            },
+            {
+              "columns": [
+                "parked_at"
+              ],
+              "split": "asc"
+            }
+          ]
+        }
+      },
+      "checks": {
+        "fundamental_inbox_parked_reason": "reason IN ('undecodable', 'invalid_event_id', 'event_id_reused', 'beyond_horizon', 'from_the_future', 'attempts_exhausted', 'handler_panicked')"
+      }
+    }
+  }
+}

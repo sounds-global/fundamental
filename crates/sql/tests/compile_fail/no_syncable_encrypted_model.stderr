@@ -1,0 +1,5 @@
+error: A `#[model(syncable)]` model cannot carry encrypted `Secret` fields: a device can never seal a value to its row, so accepting an envelope from one only lets a replayed one in
+  --> tests/compile_fail/no_syncable_encrypted_model.rs:14:8
+   |
+14 | struct Note {
+   |        ^^^^

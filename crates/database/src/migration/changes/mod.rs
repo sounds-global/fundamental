@@ -1,0 +1,47 @@
+//! Individual schema change types, one per [`SchemaChange`] variant.
+
+mod add_check_constraint;
+mod add_column;
+mod add_foreign_key;
+mod alter_column;
+mod change_key;
+mod change_key_structure;
+mod change_placement;
+mod change_reader;
+mod change_writer;
+mod create_index;
+mod create_materialized_view;
+mod create_table;
+mod drop_check_constraint;
+mod drop_column;
+mod drop_foreign_key;
+mod drop_index;
+mod drop_materialized_view;
+mod drop_table;
+mod rename_column;
+mod rename_table;
+mod reorder_columns;
+mod schema;
+
+pub use add_check_constraint::AddCheckConstraintChange;
+pub use add_column::AddColumnChange;
+pub use add_foreign_key::AddForeignKeyChange;
+pub use alter_column::AlterColumnChange;
+pub use change_key::ChangeKeyChange;
+pub use change_key_structure::ChangeKeyStructureChange;
+pub use change_placement::ChangePlacementChange;
+pub use change_reader::ChangeReaderChange;
+pub use change_writer::ChangeWriterChange;
+pub use create_index::CreateIndexChange;
+pub use create_materialized_view::CreateMaterializedViewChange;
+pub use create_table::CreateTableChange;
+pub use drop_check_constraint::DropCheckConstraintChange;
+pub use drop_column::DropColumnChange;
+pub use drop_foreign_key::DropForeignKeyChange;
+pub use drop_index::DropIndexChange;
+pub use drop_materialized_view::DropMaterializedViewChange;
+pub use drop_table::DropTableChange;
+pub use rename_column::RenameColumnChange;
+pub use rename_table::RenameTableChange;
+pub use reorder_columns::ReorderColumnsChange;
+pub use schema::SchemaChange;

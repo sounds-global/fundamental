@@ -1,0 +1,43 @@
+[package]
+name = "fundamental_jobs"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Durable jobs due at a time: scheduled in the caller's transaction, fired once at or after their due time by the database's clock, caught up in due order after a restart."
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[features]
+# Never enabled in a release build: its drain leaves jobs unfired.
+test-support = []
+
+[dependencies]
+fundamental_core = { workspace = true, features = ["chrono"] }
+fundamental_macros.workspace = true
+fundamental_db.workspace = true
+fundamental_sql.workspace = true
+fundamental_encryption.workspace = true
+fundamental_runtime = { workspace = true, features = ["db"] }
+blake3 = { workspace = true }
+chrono = { workspace = true }
+futures = { workspace = true }
+serde = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true, features = ["v4"] }
+
+[dev-dependencies]
+fundamental_jobs = { path = ".", features = ["test-support"] }
+fundamental_db_migrator = { workspace = true, features = ["sql", "test-support"] }
+fundamental_test_containers = { workspace = true, features = ["sql"] }
+tempfile = { workspace = true }
+tracing-test = { workspace = true, features = ["no-env-filter"] }
+tracing-subscriber.workspace = true

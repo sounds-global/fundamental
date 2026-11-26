@@ -1,0 +1,13 @@
+error: an inbox `#[subscribe]` must say the level its transaction runs at: `isolation = Serializable`, `RepeatableRead` or `ReadCommitted`
+  --> tests/compile_fail/inbox_without_an_isolation_level.rs:25:63
+   |
+25 | #[subscribe(stream = "DEPOSITS", consumer = "booker", inbox = "billing.book")]
+   |                                                               ^^^^^^^^^^^^^^
+
+warning: unused imports: `EffectTransaction` and `Inbound`
+ --> tests/compile_fail/inbox_without_an_isolation_level.rs:4:25
+  |
+4 | use fundamental_inbox::{EffectTransaction, Inbound};
+  |                         ^^^^^^^^^^^^^^^^^  ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default

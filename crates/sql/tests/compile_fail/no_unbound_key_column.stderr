@@ -1,0 +1,5 @@
+error: `#[model(unbound)]` names a bookkeeping column to leave out of the row binding; a key column and an encrypted column cannot be unbound
+  --> tests/compile_fail/no_unbound_key_column.rs:16:5
+   |
+16 |     id: uuid::Uuid,
+   |     ^^

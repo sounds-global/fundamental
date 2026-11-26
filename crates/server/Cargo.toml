@@ -1,0 +1,52 @@
+[package]
+name = "fundamental_server"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Framework-neutral HTTP server core for the Fundamental framework: a typed router, request context, and a pluggable ServerBackend seam with no web framework in its dependency tree."
+keywords = ["http", "server", "router", "api", "async"]
+categories = ["web-programming", "asynchronous", "network-programming"]
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+fundamental_auth.workspace = true
+fundamental_canonical.workspace = true
+fundamental_schema.workspace = true
+fundamental_observability.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_urlencoded.workspace = true
+tracing.workspace = true
+bytes.workspace = true
+futures-core.workspace = true
+multer = { workspace = true, optional = true }
+
+[features]
+multipart = ["dep:multer"]
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros", "time"] }
+serde = { workspace = true, features = ["derive"] }
+tempfile.workspace = true
+fundamental_build.workspace = true
+# The `otlp` seam for tests only: without it the trace-adoption regression test observes nothing.
+fundamental_observability = { workspace = true, features = ["otlp"] }
+opentelemetry.workspace = true
+opentelemetry_sdk.workspace = true
+tracing-opentelemetry.workspace = true
+tracing-subscriber.workspace = true

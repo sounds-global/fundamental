@@ -1,0 +1,10 @@
+@locale nl
+---
+[panel]
+save_for_owner = Bewaren voor de eigenaar
+
+[change]
+any_value = .input {$field :string}
+            .match $field
+            stage {{Elke fase}}
+            * {{Alle}}

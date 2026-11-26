@@ -1,0 +1,19 @@
+error: a JetStream `#[subscribe]` is delivered at least once, so it must choose: `inbox = "<effect>"` for one effect per event, or `without_inbox = "<why a redelivery is harmless>"`
+  --> tests/compile_fail/jetstream_without_an_inbox_choice.rs:27:22
+   |
+27 | #[subscribe(stream = "DEPOSITS", consumer = "booker", auto_ack)]
+   |                      ^^^^^^^^^^
+
+warning: unused imports: `EffectTransaction` and `Inbound`
+ --> tests/compile_fail/jetstream_without_an_inbox_choice.rs:4:25
+  |
+4 | use fundamental_inbox::{EffectTransaction, Inbound};
+  |                         ^^^^^^^^^^^^^^^^^  ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `NatsResult` and `ReceivedMessage`
+  --> tests/compile_fail/jetstream_without_an_inbox_choice.rs:25:24
+   |
+25 | use fundamental_nats::{NatsResult, ReceivedMessage};
+   |                        ^^^^^^^^^^  ^^^^^^^^^^^^^^^

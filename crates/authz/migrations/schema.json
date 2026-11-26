@@ -1,0 +1,93 @@
+{
+  "parent": "e656d0dc7f6795b79959d966e0dacf9e905fb4a5b87be927701198f718b93c73",
+  "tables": {
+    "authz_relation_tuple": {
+      "columns": [
+        {
+          "name": "tuple_key",
+          "type": "TEXT"
+        },
+        {
+          "name": "object_ns",
+          "type": "TEXT"
+        },
+        {
+          "name": "object_id",
+          "type": "TEXT"
+        },
+        {
+          "name": "relation",
+          "type": "TEXT"
+        },
+        {
+          "name": "subject_ns",
+          "type": "TEXT"
+        },
+        {
+          "name": "subject_id",
+          "type": "TEXT"
+        },
+        {
+          "name": "subject_relation",
+          "type": "TEXT"
+        },
+        {
+          "name": "caveat_name",
+          "type": "TEXT",
+          "nullable": true
+        },
+        {
+          "name": "caveat_context",
+          "type": "TEXT",
+          "nullable": true
+        }
+      ],
+      "key": [
+        {
+          "columns": [
+            "tuple_key"
+          ],
+          "split": "hash"
+        }
+      ],
+      "indexes": {
+        "authz_relation_tuple_forward_idx": {
+          "key": [
+            {
+              "columns": [
+                "object_ns",
+                "object_id",
+                "relation"
+              ],
+              "split": "hash"
+            }
+          ]
+        },
+        "authz_relation_tuple_reverse_idx": {
+          "key": [
+            {
+              "columns": [
+                "subject_ns",
+                "subject_id",
+                "subject_relation"
+              ],
+              "split": "hash"
+            },
+            {
+              "columns": [
+                "object_ns"
+              ],
+              "split": "asc"
+            },
+            {
+              "columns": [
+                "relation"
+              ],
+              "split": "asc"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

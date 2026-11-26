@@ -1,0 +1,70 @@
+[package]
+name = "fundamental_sql"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "YugabyteDB YSQL adapter for the Fundamental framework: distributed SQL persistence implementing the fundamental_db repository, transaction, and migration traits."
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+blake3.workspace = true
+fundamental_db.workspace = true
+fundamental_core = { workspace = true, features = ["chrono"] }
+fundamental_macros.workspace = true
+fundamental_sync.workspace = true
+fundamental_encryption.workspace = true
+fundamental_config.workspace = true
+fundamental_secrets.workspace = true
+arc-swap.workspace = true
+sqlx = { workspace = true, features = [
+    "runtime-tokio",
+    "tls-rustls-aws-lc-rs",
+    "postgres",
+    "uuid",
+    "chrono",
+    "json",
+] }
+tracing.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+prometheus.workspace = true
+parking_lot.workspace = true
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+futures.workspace = true
+
+[dev-dependencies]
+trybuild.workspace = true
+fundamental_sql = { path = ".", features = ["test-support"] }
+fundamental_test_containers = { workspace = true, features = ["sql", "openbao"] }
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "test-util", "sync"] }
+uuid = { workspace = true, features = ["v4", "v1"] }
+tracing-subscriber.workspace = true
+tracing-test = { workspace = true, features = ["no-env-filter"] }
+async-trait.workspace = true
+base64.workspace = true
+criterion.workspace = true
+tempfile.workspace = true
+
+[features]
+internal-benches = []
+test-support = ["fundamental_db/ephemeral"]
+
+[[bench]]
+name = "query_build"
+harness = false
+required-features = ["internal-benches"]

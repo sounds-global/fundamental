@@ -1,0 +1,66 @@
+//! Market-addressed URLs: one canonical address per page per locale.
+
+mod absolute_url;
+mod address_error;
+mod address_space;
+mod canonical_spelling;
+mod dns_label;
+mod is_canonical_path;
+mod landing;
+mod language_paths;
+mod local_suffix;
+mod locale_prefix_set;
+mod page_language;
+mod page_path;
+mod page_slug;
+mod path_segment;
+mod percent_decode_segment;
+mod percent_encode_segment;
+mod prefix_match;
+mod prefix_scope;
+#[cfg(feature = "slug-proposal")]
+mod propose_slug;
+mod request_address;
+mod resolved_address;
+mod return_path;
+mod return_path_error;
+mod scoped_number;
+mod segment_text;
+mod slug;
+mod slug_status;
+mod slug_table;
+mod slug_table_builder;
+mod test_apex;
+mod web_origin;
+
+pub use absolute_url::AbsoluteUrl;
+pub use address_error::AddressError;
+pub use address_space::AddressSpace;
+pub use dns_label::DnsLabel;
+pub use is_canonical_path::is_canonical_path;
+pub use landing::Landing;
+pub use language_paths::LanguagePaths;
+pub use local_suffix::LocalSuffix;
+pub use locale_prefix_set::LocalePrefixSet;
+pub use page_language::PageLanguage;
+pub use page_path::PagePath;
+pub use page_slug::PageSlug;
+pub use path_segment::PathSegment;
+pub use percent_decode_segment::percent_decode_segment;
+pub use percent_encode_segment::percent_encode_segment;
+pub use prefix_match::PrefixMatch;
+pub use prefix_scope::PrefixScope;
+#[cfg(feature = "slug-proposal")]
+pub use propose_slug::propose_slug;
+pub use request_address::RequestAddress;
+pub use resolved_address::ResolvedAddress;
+pub use return_path::ReturnPath;
+pub use return_path_error::ReturnPathError;
+pub use scoped_number::ScopedNumber;
+pub use segment_text::SegmentText;
+pub use slug::Slug;
+pub use slug_status::SlugStatus;
+pub use slug_table::SlugTable;
+pub use slug_table_builder::SlugTableBuilder;
+pub use test_apex::TestApex;
+pub use web_origin::WebOrigin;

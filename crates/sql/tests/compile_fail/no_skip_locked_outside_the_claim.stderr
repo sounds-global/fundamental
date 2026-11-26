@@ -1,0 +1,10 @@
+error[E0624]: method `for_update_skip_locked` is private
+  --> tests/compile_fail/no_skip_locked_outside_the_claim.rs:29:10
+   |
+29 |         .for_update_skip_locked();
+   |          ^^^^^^^^^^^^^^^^^^^^^^ private method
+   |
+  ::: src/query/builder.rs
+   |
+   |     pub(crate) fn for_update_skip_locked(mut self) -> Self {
+   |     ------------------------------------------------------ private method defined here

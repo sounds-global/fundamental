@@ -1,0 +1,54 @@
+{
+  "arch": "aarch64",
+  "toolchain": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "benches": {
+    "fundamental_bench/instructions/action/dispatch.json_body": {
+      "ir": 16087
+    },
+    "fundamental_bench/instructions/config/load.production": {
+      "ir": 534012
+    },
+    "fundamental_bench/instructions/config/manifest.production": {
+      "ir": 227465
+    },
+    "fundamental_bench/instructions/mf2/format.twelve_messages": {
+      "ir": 65337
+    },
+    "fundamental_bench/instructions/migration/diff.fifty_tables": {
+      "ir": 1867628
+    },
+    "fundamental_bench/instructions/migration/differences.fifty_tables": {
+      "ir": 1102042
+    },
+    "fundamental_bench/instructions/migration/generate.fifty_tables": {
+      "ir": 1286351
+    },
+    "fundamental_bench/instructions/query/select_cql.ten_clustering": {
+      "ir": 31066
+    },
+    "fundamental_bench/instructions/query/select_sql.ten_filters": {
+      "ir": 28145
+    },
+    "fundamental_bench/instructions/query/update_sql.ten_columns": {
+      "ir": 24691
+    },
+    "fundamental_bench/instructions/render/page.fifty_rows": {
+      "ir": 188098
+    },
+    "fundamental_bench/instructions/sync/canonical.one_row": {
+      "ir": 2814
+    },
+    "fundamental_bench/instructions/sync/decode_pull.hundred_rows": {
+      "ir": 1049920
+    },
+    "fundamental_bench/instructions/sync/encode_pull.hundred_rows": {
+      "ir": 386782
+    },
+    "fundamental_bench/instructions/sync/envelope_round_trip.one_frame": {
+      "ir": 21993
+    },
+    "fundamental_bench/instructions/sync/push_round_trip.one_row": {
+      "ir": 18158
+    }
+  }
+}

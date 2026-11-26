@@ -1,0 +1,4 @@
+# Build output, at any depth: compile-fail cases, container harnesses and benchmarks keep
+# their own `target/` beside their crate.
+target/
+.DS_Store

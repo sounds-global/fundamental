@@ -1,0 +1,41 @@
+[package]
+name = "fundamental_manifest"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Reads a Fundamental project's settings — fun.toml with an environment's fun.<env>.toml or a machine's fun.local.toml over it — into one checked view, with every value's file and line."
+keywords = ["manifest", "configuration", "toml"]
+categories = ["config"]
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[features]
+# Only the CLI enables it: a deployed service must not rewrite its own settings.
+edit = []
+ledger = []
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+toml_edit.workspace = true
+toml.workspace = true
+serde = { workspace = true, features = ["derive"] }
+tracing.workspace = true
+blake3.workspace = true
+
+[dev-dependencies]
+fundamental_manifest = { path = ".", features = ["edit", "ledger"] }
+tempfile.workspace = true
+proptest.workspace = true

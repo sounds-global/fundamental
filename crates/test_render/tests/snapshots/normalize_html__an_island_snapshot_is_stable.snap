@@ -1,0 +1,11 @@
+---
+source: crates/test_render/tests/normalize_html.rs
+expression: "$crate ::\nnormalize_html(&\nrender_html(|| view! { <Disclosure><p>\"Inhoud\"</p></Disclosure> }))"
+---
+<leptos-island data-component="Disclosure_[hash]">
+<details>
+<leptos-children>
+<p>Inhoud</p>
+</leptos-children>
+</details>
+</leptos-island>

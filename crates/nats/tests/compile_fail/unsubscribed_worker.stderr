@@ -1,0 +1,5 @@
+error[E0425]: cannot find function `greet_worker` in this scope
+  --> tests/compile_fail/unsubscribed_worker.rs:30:28
+   |
+30 | mount_workers! { on_hello, greet }
+   |                            ^^^^^ not found in this scope

@@ -1,0 +1,123 @@
+error[E0277]: the trait bound `for<'q> HolderAccountKey: fundamental_sql::sqlx::Encode<'q, Postgres>` is not satisfied
+  --> tests/compile_fail/no_delete_by_partial_key.rs:26:9
+   |
+26 |         fundamental_sql::SqlModelQuery::<HolderAccount>::delete_by_id(pool, &"eu")
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `for<'q> fundamental_sql::sqlx::Encode<'q, Postgres>` is not implemented for `HolderAccountKey`
+  --> tests/compile_fail/no_delete_by_partial_key.rs:12:10
+   |
+12 | #[derive(Model)]
+   |          ^^^^^
+   = help: the following other types implement trait `fundamental_sql::sqlx::Encode<'q, DB>`:
+             `&'a str` implements `fundamental_sql::sqlx::Encode<'a, fundamental_sql::sqlx::Any>`
+             `&'q JsonRawValue` implements `fundamental_sql::sqlx::Encode<'q, DB>`
+             `&'q [u8]` implements `fundamental_sql::sqlx::Encode<'q, fundamental_sql::sqlx::Any>`
+             `&T` implements `fundamental_sql::sqlx::Encode<'q, DB>`
+             `&[T]` implements `fundamental_sql::sqlx::Encode<'q, Postgres>`
+             `&[u8]` implements `fundamental_sql::sqlx::Encode<'_, Postgres>`
+             `&str` implements `fundamental_sql::sqlx::Encode<'_, Postgres>`
+             `Arc<T>` implements `fundamental_sql::sqlx::Encode<'q, DB>`
+           and $N others
+note: required by a bound in `SqlModelQuery::<'a, M>::delete_by_id`
+  --> src/model/query.rs
+   |
+   |     pub async fn delete_by_id<Id>(conn: impl Into<SqlConn<'a>>, id: &Id) -> DatabaseResult<u64>
+   |                  ------------ required by a bound in this associated function
+...
+   |         M::Id: Send + Sync + for<'q> sqlx::Encode<'q, sqlx::Postgres> + sqlx::Type<sqlx::Postgres>,
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `SqlModelQuery::<'a, M>::delete_by_id`
+   = note: this error originates in the derive macro `Model` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `HolderAccountKey: fundamental_sql::sqlx::Type<Postgres>` is not satisfied
+  --> tests/compile_fail/no_delete_by_partial_key.rs:26:9
+   |
+26 |         fundamental_sql::SqlModelQuery::<HolderAccount>::delete_by_id(pool, &"eu")
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `fundamental_sql::sqlx::Type<Postgres>` is not implemented for `HolderAccountKey`
+  --> tests/compile_fail/no_delete_by_partial_key.rs:12:10
+   |
+12 | #[derive(Model)]
+   |          ^^^^^
+   = help: the following other types implement trait `fundamental_sql::sqlx::Type<DB>`:
+             ()
+             (T1, T2)
+             (T1, T2, T3)
+             (T1, T2, T3, T4)
+             (T1, T2, T3, T4, T5)
+             (T1, T2, T3, T4, T5, T6)
+             (T1, T2, T3, T4, T5, T6, T7)
+             (T1, T2, T3, T4, T5, T6, T7, T8)
+           and $N others
+note: required by a bound in `SqlModelQuery::<'a, M>::delete_by_id`
+  --> src/model/query.rs
+   |
+   |     pub async fn delete_by_id<Id>(conn: impl Into<SqlConn<'a>>, id: &Id) -> DatabaseResult<u64>
+   |                  ------------ required by a bound in this associated function
+...
+   |         M::Id: Send + Sync + for<'q> sqlx::Encode<'q, sqlx::Postgres> + sqlx::Type<sqlx::Postgres>,
+   |                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `SqlModelQuery::<'a, M>::delete_by_id`
+   = note: this error originates in the derive macro `Model` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `for<'q> HolderAccountKey: fundamental_sql::sqlx::Encode<'q, Postgres>` is not satisfied
+  --> tests/compile_fail/no_delete_by_partial_key.rs:27:14
+   |
+27 |             .await;
+   |              ^^^^^ unsatisfied trait bound
+   |
+help: the trait `for<'q> fundamental_sql::sqlx::Encode<'q, Postgres>` is not implemented for `HolderAccountKey`
+  --> tests/compile_fail/no_delete_by_partial_key.rs:12:10
+   |
+12 | #[derive(Model)]
+   |          ^^^^^
+   = help: the following other types implement trait `fundamental_sql::sqlx::Encode<'q, DB>`:
+             `&'a str` implements `fundamental_sql::sqlx::Encode<'a, fundamental_sql::sqlx::Any>`
+             `&'q JsonRawValue` implements `fundamental_sql::sqlx::Encode<'q, DB>`
+             `&'q [u8]` implements `fundamental_sql::sqlx::Encode<'q, fundamental_sql::sqlx::Any>`
+             `&T` implements `fundamental_sql::sqlx::Encode<'q, DB>`
+             `&[T]` implements `fundamental_sql::sqlx::Encode<'q, Postgres>`
+             `&[u8]` implements `fundamental_sql::sqlx::Encode<'_, Postgres>`
+             `&str` implements `fundamental_sql::sqlx::Encode<'_, Postgres>`
+             `Arc<T>` implements `fundamental_sql::sqlx::Encode<'q, DB>`
+           and $N others
+note: required by a bound in `SqlModelQuery::<'a, M>::delete_by_id`
+  --> src/model/query.rs
+   |
+   |     pub async fn delete_by_id<Id>(conn: impl Into<SqlConn<'a>>, id: &Id) -> DatabaseResult<u64>
+   |                  ------------ required by a bound in this associated function
+...
+   |         M::Id: Send + Sync + for<'q> sqlx::Encode<'q, sqlx::Postgres> + sqlx::Type<sqlx::Postgres>,
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `SqlModelQuery::<'a, M>::delete_by_id`
+   = note: this error originates in the derive macro `Model` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `HolderAccountKey: fundamental_sql::sqlx::Type<Postgres>` is not satisfied
+  --> tests/compile_fail/no_delete_by_partial_key.rs:27:14
+   |
+27 |             .await;
+   |              ^^^^^ unsatisfied trait bound
+   |
+help: the trait `fundamental_sql::sqlx::Type<Postgres>` is not implemented for `HolderAccountKey`
+  --> tests/compile_fail/no_delete_by_partial_key.rs:12:10
+   |
+12 | #[derive(Model)]
+   |          ^^^^^
+   = help: the following other types implement trait `fundamental_sql::sqlx::Type<DB>`:
+             ()
+             (T1, T2)
+             (T1, T2, T3)
+             (T1, T2, T3, T4)
+             (T1, T2, T3, T4, T5)
+             (T1, T2, T3, T4, T5, T6)
+             (T1, T2, T3, T4, T5, T6, T7)
+             (T1, T2, T3, T4, T5, T6, T7, T8)
+           and $N others
+note: required by a bound in `SqlModelQuery::<'a, M>::delete_by_id`
+  --> src/model/query.rs
+   |
+   |     pub async fn delete_by_id<Id>(conn: impl Into<SqlConn<'a>>, id: &Id) -> DatabaseResult<u64>
+   |                  ------------ required by a bound in this associated function
+...
+   |         M::Id: Send + Sync + for<'q> sqlx::Encode<'q, sqlx::Postgres> + sqlx::Type<sqlx::Postgres>,
+   |                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `SqlModelQuery::<'a, M>::delete_by_id`
+   = note: this error originates in the derive macro `Model` (in Nightly builds, run with -Z macro-backtrace for more info)

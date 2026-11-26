@@ -1,0 +1,37 @@
+# Tier 2 (wasm codegen check): run wasm32-wasip1 benchmark binaries under
+# wasmtime so the native criterion benches can also be measured as compiled
+# WebAssembly — catching wasm-specific cliffs (allocator, SIMD, fp-to-int).
+#
+# Use the pure-logic crates (no browser bindings) — `fundamental_core` /
+# `fundamental_db` — not `fundamental_offline`, whose wasm build pulls the
+# browser-only sqlite-wasm-rs/IndexedDB VFS (covered by the in-browser Tier 3).
+#
+# Prerequisites (not vendored): `rustup target add wasm32-wasip1` and `wasmtime`
+# on PATH. Example:
+#   cargo bench -p fundamental_db --bench schema_diff --target wasm32-wasip1
+#
+# This only affects the wasm32-wasip1 target; native builds are unchanged.
+# `--dir .` preopens the workspace directory so criterion can persist its result
+# files (target/criterion/...); without it wasmtime's filesystem sandbox denies
+# the writes and criterion logs "No such file or directory (os error 44)".
+[target.wasm32-wasip1]
+runner = ["wasmtime", "--dir", "."]
+
+# Test threads get 8 MiB, not the 2 MiB Rust gives a spawned thread by default.
+#
+# Three CQL integration tests abort with `fatal runtime error: stack overflow` at the
+# default — `test_domain_routes_to_named_connection`, `slice_store_round_trips_through_the_outbox`
+# and `test_rate_limit_new_window_resets_and_clears_the_previous`. Not recursion: each
+# completes normally the moment the stack is raised, and each aborts identically on commits
+# that predate the work that found them. It is a debug build composing deeply nested async
+# state machines — two pools, two keyspaces, and a future per layer — where every `.await`
+# frame is held live and nothing is inlined away.
+#
+# 8 MiB is what the main thread already gets from the OS, so this makes a spawned test
+# thread behave like the one libtest uses when `--test-threads 1`, rather than picking a
+# number. A release build is nowhere near either bound.
+#
+# This was invisible because the store-backed suites have never run in CI: the lane that
+# would run them is gated on a self-hosted fleet that does not exist yet.
+[env]
+RUST_MIN_STACK = "8388608"

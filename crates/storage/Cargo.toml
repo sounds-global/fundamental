@@ -1,0 +1,39 @@
+[package]
+name = "fundamental_storage"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Object storage behind a provider port: streamed puts under a byte bound, ranged reads, final deletes, and private buckets that hold only what the framework sealed — each object under its own key, opened a segment at a time."
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[features]
+fake = []
+fs = ["dep:tokio", "dep:rustix"]
+conformance = ["fake"]
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+fundamental_encryption.workspace = true
+blake3 = { workspace = true }
+bytes = { workspace = true }
+futures = { workspace = true }
+ring = { workspace = true }
+tracing = { workspace = true }
+tokio = { workspace = true, optional = true, features = ["fs", "io-util", "rt"] }
+rustix = { workspace = true, optional = true, features = ["fs"] }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+fundamental_storage = { path = ".", features = ["conformance", "fs"] }
+tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
+tracing-test = { workspace = true, features = ["no-env-filter"] }

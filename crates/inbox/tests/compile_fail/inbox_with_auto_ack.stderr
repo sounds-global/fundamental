@@ -1,0 +1,13 @@
+error: `auto_ack` cannot be combined with `inbox`: the inbox settles each delivery once its effect has committed or failed
+  --> tests/compile_fail/inbox_with_auto_ack.rs:25:105
+   |
+25 | #[subscribe(stream = "DEPOSITS", consumer = "booker", inbox = "billing.book", isolation = Serializable, auto_ack)]
+   |                                                                                                         ^^^^^^^^
+
+warning: unused imports: `EffectTransaction` and `Inbound`
+ --> tests/compile_fail/inbox_with_auto_ack.rs:4:25
+  |
+4 | use fundamental_inbox::{EffectTransaction, Inbound};
+  |                         ^^^^^^^^^^^^^^^^^  ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default

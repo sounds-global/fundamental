@@ -1,0 +1,19 @@
+error: the table `fundamental_inbox` is reserved: `fundamental_*` tables belong to the framework
+  --> tests/compile_fail/inbox_handler_writes_a_framework_table.rs:27:8
+   |
+27 | struct Ledger {
+   |        ^^^^^^
+
+warning: unused imports: `EffectTransaction` and `Inbound`
+ --> tests/compile_fail/inbox_handler_writes_a_framework_table.rs:4:25
+  |
+4 | use fundamental_inbox::{EffectTransaction, Inbound};
+  |                         ^^^^^^^^^^^^^^^^^  ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `subscribe`
+ --> tests/compile_fail/inbox_handler_writes_a_framework_table.rs:5:49
+  |
+5 | use fundamental_macros::{Error, mount_messages, subscribe};
+  |                                                 ^^^^^^^^^

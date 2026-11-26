@@ -1,0 +1,28 @@
+[package]
+name = "fundamental_messages_fixture"
+version.workspace = true
+edition.workspace = true
+publish = false
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "A crate with messages in English and Dutch, built as a project's crate builds them, for the messages' own tests."
+
+[lints]
+workspace = true
+
+[dependencies]
+fundamental_messages = { path = "..", features = ["leptos"] }
+
+[dev-dependencies]
+# A page in a reader's language: the ambient translator, and a view rendered as a served page renders it.
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+fundamental_test_render.workspace = true
+leptos = { workspace = true, features = ["ssr"] }
+# A variant whose fields are not its message's inputs does not compile.
+trybuild.workspace = true
+
+[build-dependencies]
+fundamental_messages_build = { path = "../../messages_build" }

@@ -1,0 +1,5 @@
+error: another column already says it `was` this one; only one column can have been it
+  --> tests/compile_fail/no_two_columns_that_were_one.rs:18:5
+   |
+18 |     heading: String,
+   |     ^^^^^^^

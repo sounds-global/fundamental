@@ -1,0 +1,5 @@
+error[E0599]: no method named `execute` found for mutable reference `&mut EffectTransaction<'_>` in the current scope
+  --> tests/compile_fail/inbox_handler_executes_raw_sql.rs:31:16
+   |
+31 |     let _ = tx.execute("COMMIT").await;
+   |                ^^^^^^^ method not found in `&mut EffectTransaction<'_>`

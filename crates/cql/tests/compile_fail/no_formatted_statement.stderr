@@ -1,0 +1,9 @@
+error[E0716]: temporary value dropped while borrowed
+  --> tests/compile_fail/no_formatted_statement.rs:13:15
+   |
+13 |     Cql::new(&format!("SELECT * FROM {table}"))
+   |     ----------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^-
+   |     |         |                               |
+   |     |         |                               temporary value is freed at the end of this statement
+   |     |         creates a temporary value which is freed while still in use
+   |     argument requires that borrow lasts for `'static`

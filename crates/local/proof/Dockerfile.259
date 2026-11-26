@@ -1,0 +1,3 @@
+FROM fedora:44
+RUN dnf -y -q install systemd systemd-resolved iproute dnsmasq bind-utils >/dev/null && dnf clean all >/dev/null
+CMD ["/sbin/init"]

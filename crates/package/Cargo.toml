@@ -1,0 +1,29 @@
+[package]
+name = "fundamental_package"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "An app's built files as one bounded, verifiable package: a tar.zst whose first entry, package.json, names each file's path, size, mode and BLAKE3."
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+blake3 = { workspace = true, features = ["std"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+tar.workspace = true
+tracing.workspace = true
+zstd.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

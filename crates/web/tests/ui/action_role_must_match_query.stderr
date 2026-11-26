@@ -1,0 +1,20 @@
+error[E0277]: the trait bound `ActionHook<Read, MutationOperation>: fundamental_web::QuerySource` is not satisfied
+  --> tests/ui/action_role_must_match_query.rs:16:19
+   |
+16 |     require_query(actions::use_read());
+   |     ------------- ^^^^^^^^^^^^^^^^^^^ the trait `fundamental_web::QuerySource` is not implemented for `ActionHook<Read, MutationOperation>`
+   |     |
+   |     required by a bound introduced by this call
+   |
+   = help: the following other types implement trait `fundamental_web::QuerySource`:
+             ActionHook<M, QueryOperation, fundamental_web::async_ui::action_query_source::ActionQuerySource<F>, P>
+             ActionHook<M, QueryOperation, fundamental_web::async_ui::blocking_source::BlockingSource<fundamental_web::async_ui::action_query_source::ActionQuerySource<F>>, P>
+             ActionHook<M, QueryOperation, fundamental_web::async_ui::blocking_source::BlockingSource<fundamental_web::async_ui::no_query_source::NoQuerySource>, P>
+             ActionHook<M, QueryOperation, fundamental_web::async_ui::local_source::LocalSource<fundamental_web::async_ui::action_query_source::ActionQuerySource<F>>, P>
+             ActionHook<M, QueryOperation, fundamental_web::async_ui::local_source::LocalSource<fundamental_web::async_ui::no_query_source::NoQuerySource>, P>
+             ActionHook<M, QueryOperation, fundamental_web::async_ui::no_query_source::NoQuerySource, P>
+note: required by a bound in `require_query`
+  --> tests/ui/action_role_must_match_query.rs:13:21
+   |
+13 | fn require_query<S: fundamental_web::QuerySource>(_: S) {}
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `require_query`

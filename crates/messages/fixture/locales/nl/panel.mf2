@@ -1,0 +1,47 @@
+@locale nl
+---
+[panel]
+save_for_owner = Opslaan voor een eigenaar
+version = .input {$number :integer} {{Versie {$number}}}
+pages = .input {$count :integer}
+        .match $count
+        one {{{$count} pagina}}
+        * {{{$count} pagina's}}
+greeting = Hallo {$name}
+filter = .input {$field :string}
+         .match $field
+         stage {{Elke fase}}
+         * {{Alle}}
+
+[kind]
+milestone = Mijlpaal
+important_change = Belangrijke wijziging
+
+[model.article]
+one = artikel
+many = artikelen
+the = het artikel
+new_one = nieuw artikel
+this = dit artikel
+
+[model.article.field]
+headline = Kop
+kind = Soort
+
+[notice]
+message_subject = Nieuwe berichten in {$scope}
+blocking_subject = Er wacht een vraag in {$scope}
+sign_in_subject = Je aanmelding
+body = {$summary}
+
+[change]
+changed_at = gewijzigd {$at}
+counted = .input {$count :integer} {{{$count} {$noun}}}
+any_value = .input {$field} {{Alle}}
+
+[act]
+do = Doen
+
+[brand]
+signed = Verstuurd door {name :brand}
+footer = {legal-name :brand} · {site-domain :brand}

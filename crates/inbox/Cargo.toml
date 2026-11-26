@@ -1,0 +1,41 @@
+[package]
+name = "fundamental_inbox"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "An idempotent-consumer inbox: an event's effect commits in one transaction with the record that it ran, so a redelivered, replayed or concurrent copy never has a second effect."
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[dependencies]
+fundamental_core = { workspace = true, features = ["chrono"] }
+fundamental_macros.workspace = true
+fundamental_db.workspace = true
+fundamental_sql.workspace = true
+fundamental_nats = { workspace = true, features = ["jetstream"] }
+fundamental_runtime.workspace = true
+fundamental_command.workspace = true
+fundamental_observability.workspace = true
+chrono = { workspace = true }
+futures = { workspace = true }
+serde = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true, features = ["v4", "v7"] }
+
+[dev-dependencies]
+fundamental_core = { workspace = true, features = ["chrono", "seeded-entropy"] }
+fundamental_db_migrator = { workspace = true, features = ["sql", "test-support"] }
+fundamental_test_containers = { workspace = true, features = ["sql", "nats"] }
+sqlx = { workspace = true }
+tempfile = { workspace = true }
+tracing-test = { workspace = true, features = ["no-env-filter"] }
+trybuild = { workspace = true }

@@ -1,0 +1,49 @@
+# Resolver stub for sqlx-sqlite — see [patch.crates-io] in the workspace root.
+#
+# Why this exists: `libsqlite3-sys` uses `links = "sqlite3"`, so cargo allows
+# exactly ONE version of it per dependency graph — and cargo resolves optional
+# dependencies even when no feature enables them. sqlx 0.9 (postgres driver
+# for fundamental_sql) caps `libsqlite3-sys < 0.38` through its optional
+# sqlx-sqlite driver, while rusqlite 0.40 (fundamental_offline, SQLite 3.53+)
+# requires `libsqlite3-sys 0.38`. Those cannot co-resolve.
+#
+# This workspace NEVER enables sqlx's sqlite driver (SQLite belongs to
+# fundamental_offline via rusqlite), so we patch sqlx-sqlite with this empty
+# stub that has no libsqlite3-sys dependency at all. It only participates in
+# version resolution and compiles to nothing. If sqlx's sqlite driver is ever
+# enabled, sqlx references real sqlx_sqlite items this stub does not define, so
+# the build fails loudly instead of linking a non-functional driver.
+#
+# It is a workspace member (despite living under vendor/) so that apps depending
+# on fundamental over git can reach it for their own mandatory
+# `[patch.crates-io] sqlx-sqlite = { git = "…fundamental…" }` entry — see lib.rs.
+#
+# Remove this stub (and the [patch.crates-io] entry) once sqlx widens its
+# libsqlite3-sys range to include 0.38:
+# https://github.com/launchbadge/sqlx/blob/main/sqlx-sqlite/Cargo.toml
+
+[package]
+name = "sqlx-sqlite"
+version = "0.9.0"
+license = "Apache-2.0"
+edition = "2021"
+publish = false
+
+# Every feature sqlx 0.9.0 references on sqlx-sqlite must exist here.
+[features]
+_unstable-docs = []
+any = []
+bundled = []
+chrono = []
+deserialize = []
+json = []
+load-extension = []
+migrate = []
+offline = []
+preupdate-hook = []
+regexp = []
+sqlx-toml = []
+time = []
+unbundled = []
+unlock-notify = []
+uuid = []

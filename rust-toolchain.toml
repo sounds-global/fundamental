@@ -1,0 +1,7 @@
+# The toolchain this workspace builds with. `rust-version` in `Cargo.toml` is the floor the
+# crates support; this is the exact version a build here uses.
+[toolchain]
+channel = "1.96.0"
+components = ["rustfmt", "clippy"]
+# The browser builds compile for this target.
+targets = ["wasm32-unknown-unknown"]

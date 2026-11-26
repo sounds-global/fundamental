@@ -1,0 +1,36 @@
+[package]
+name = "fundamental_seed"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Database seeding for the Fundamental framework: a #[seed] attribute and an ordered, dependency-aware runner over a generic, app-owned context."
+keywords = ["seed", "database", "fixtures", "bootstrap", "async"]
+categories = ["database", "asynchronous"]
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+fundamental_config.workspace = true
+fundamental_core.workspace = true
+fundamental_db.workspace = true
+fundamental_macros.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+fundamental_offline.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
+tracing-subscriber.workspace = true
+tracing-test = { workspace = true, features = ["no-env-filter"] }

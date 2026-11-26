@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# Holds a commit message to the rule in AGENTS.md: a Conventional Commit on one line, at
+# most 72 characters, lower case and imperative, with a scope from `.githooks/scopes`.
+# Nothing after it but `Signed-off-by:` lines (the DCO sign-off of `git commit -s`).
+set -euo pipefail
+
+MSG_FILE="$1"
+SOURCE="${2-}"
+HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+SUBJECT_MAX=72
+TYPES='feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert'
+
+# `git merge` and `--squash` generate multi-line messages that are not the
+# author's prose; they are exempt rather than silently mangled.
+case "$SOURCE" in
+    merge | squash) exit 0 ;;
+esac
+
+# Mirror `--cleanup=strip`: drop comment lines and surrounding blank lines, so the
+# editor's own scissors line is never mistaken for a body.
+BODY="$(sed -e '/^#/d' "$MSG_FILE" | sed -e :a -e '/^\n*$/{$d;N;ba' -e '}')"
+
+die() {
+    printf '\033[1;31mcommit-msg refused:\033[0m %s\n\n' "$1" >&2
+    printf '  the rule: type(scope): description — one line, lower-case, imperative,\n' >&2
+    printf '            no trailing period, %s characters at most.\n' "$SUBJECT_MAX" >&2
+    printf '  types:    %s\n' "$(printf '%s' "$TYPES" | tr '|' ' ')" >&2
+    printf '  scopes:   the closed list in .githooks/scopes\n' >&2
+    printf '  good:     fix(sync): keep the slice cursor across a reconnect\n\n' >&2
+    printf '  what was written:\n' >&2
+    printf '%s\n' "$BODY" | sed 's/^/    | /' >&2
+    printf '\n  a commit here carries this line and its Signed-off-by: lines, nothing else.\n' >&2
+    exit 1
+}
+
+SIGNOFF='^Signed-off-by: [^<>]+ <[^<>@]+@[^<>]+>$'
+REST="$(printf '%s\n' "$BODY" | sed '1d' | grep -vE "$SIGNOFF" | tr -d '[:space:]' || true)"
+[ -z "$REST" ] || die "only Signed-off-by: lines may follow the first line."
+BODY="$(printf '%s\n' "$BODY" | sed -n '1p')"
+
+LINES="$(printf '%s\n' "$BODY" | grep -c '' || true)"
+
+[ -n "$(printf '%s' "$BODY" | tr -d '[:space:]')" ] || die "the message is empty."
+
+if [ "$LINES" -gt 1 ]; then
+    die "the message is $LINES lines; it must be exactly one."
+fi
+
+if [ "${#BODY}" -gt "$SUBJECT_MAX" ]; then
+    die "it is ${#BODY} characters; the cap is $SUBJECT_MAX."
+fi
+
+if ! printf '%s' "$BODY" | grep -qE "^($TYPES)(\([a-z0-9][a-z0-9._/-]*\))?!?: .+$"; then
+    die "it is not a Conventional Commit."
+fi
+
+# The scope is checked against the closed vocabulary rather than against a shape,
+# so a plausible typo is refused instead of quietly founding a second name for an
+# area that already has one.
+SCOPE="$(printf '%s' "$BODY" | sed -nE "s/^($TYPES)\(([^)]*)\).*/\2/p")"
+if [ -n "$SCOPE" ]; then
+    [ -f "$HOOK_DIR/scopes" ] ||
+        die "a scope was given but .githooks/scopes is missing; nothing can validate it."
+    if ! grep -v '^#' "$HOOK_DIR/scopes" | grep -qxF "$SCOPE"; then
+        die "'$SCOPE' is not a known scope. Add it to .githooks/scopes if it is real."
+    fi
+fi
+
+DESCRIPTION="$(printf '%s' "$BODY" | sed -E "s/^($TYPES)(\([^)]*\))?!?: //")"
+
+case "$DESCRIPTION" in
+    [A-Z]*) die "the description starts with a capital; it is lower-case and imperative." ;;
+    *.) die "the description ends with a period; it should not." ;;
+esac
+
+if printf '%s' "$BODY" | grep -qiE '^[[:space:]]*(wip\b|.*\bwip[[:space:]]*$)'; then
+    die "'WIP' is not a commit. Never commit a half-done step or a failing state."
+fi
+
+exit 0

@@ -1,0 +1,23 @@
+# What never enters a build context rooted at this repository, such as a consumer's
+# `--build-context fundamental=../fundamental`.
+
+# --- Build artifacts ---
+target/
+**/target/
+**/node_modules/
+**/pkg/
+
+# --- Secrets and local state. Never, under any circumstances. ---
+.dev.vars
+.dev.vars.*
+keys/
+secrets/
+certs/
+*.pem
+*.key
+volumes/
+
+# --- Version control and editor state ---
+.git/
+.github/
+**/.DS_Store

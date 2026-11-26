@@ -1,0 +1,32 @@
+error[E0277]: the trait bound `&mut Vec<i64>: Clone` is not satisfied in `{async closure@$DIR/tests/compile_fail/no_transaction_that_cannot_be_rerun.rs:18:52: 18:63}`
+  --> tests/compile_fail/no_transaction_that_cannot_be_rerun.rs:18:52
+   |
+18 |           .transaction(IsolationLevel::Serializable, async |_tx| {
+   |  __________-----------_______________________________^
+   | |          |
+   | |          required by a bound introduced by this call
+19 | |             minted.push(1);
+20 | |             Ok(())
+21 | |         })
+   | |_________^ unsatisfied trait bound
+   |
+   = help: within `{async closure@$DIR/tests/compile_fail/no_transaction_that_cannot_be_rerun.rs:18:52: 18:63}`, the trait `Clone` is not implemented for `&mut Vec<i64>`
+help: the trait `Clone` is implemented for `Vec<T, A>`
+  --> $RUST/alloc/src/vec/mod.rs
+   |
+   | impl<T: Clone, A: Allocator + Clone> Clone for Vec<T, A> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = note: `Clone` is implemented for `&Vec<i64>`, but not for `&mut Vec<i64>`
+note: required because it's used within this closure
+  --> tests/compile_fail/no_transaction_that_cannot_be_rerun.rs:18:52
+   |
+18 |         .transaction(IsolationLevel::Serializable, async |_tx| {
+   |                                                    ^^^^^^^^^^^
+note: required by a bound in `SqlPool::transaction`
+  --> src/pool/wrapper.rs
+   |
+   |     pub async fn transaction<F, T, E>(&self, level: IsolationLevel, f: F) -> Result<T, E>
+   |                  ----------- required by a bound in this associated function
+   |     where
+   |         F: AsyncFnOnce(&mut SqlTransaction) -> Result<T, E> + Clone,
+   |                                                               ^^^^^ required by this bound in `SqlPool::transaction`

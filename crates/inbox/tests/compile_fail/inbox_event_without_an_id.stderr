@@ -1,0 +1,79 @@
+error[E0277]: `Anonymous` does not name the event it records
+  --> tests/compile_fail/inbox_event_without_an_id.rs:32:63
+   |
+31 | #[subscribe(stream = "DEPOSITS", consumer = "booker", inbox = "billing.book", isolation = Serializable)]
+   | -------------------------------------------------------------------------------------------------------- required by a bound introduced by this call
+32 | async fn book(tx: &mut EffectTransaction<'_>, event: &Inbound<Anonymous>) -> Result<(), BookingError> {
+   |                                                               ^^^^^^^^^ an inbox deduplicates on the identity the payload carries
+   |
+help: the trait `Event` is not implemented for `Anonymous`
+  --> tests/compile_fail/inbox_event_without_an_id.rs:27:1
+   |
+27 | struct Anonymous {
+   | ^^^^^^^^^^^^^^^^
+   = note: add an `EventId` field marked `#[event_id]` to `Anonymous`, set with `EventId::generate()` where the event happens
+help: the trait `Event` is implemented for `DepositPaid`
+  --> tests/compile_fail/inbox_event_without_an_id.rs:9:34
+   |
+ 9 | #[derive(Serialize, Deserialize, Message)]
+   |                                  ^^^^^^^
+note: required by a bound in `Inbox::listen`
+  --> src/inbox.rs
+   |
+   |     pub async fn listen<M, E>(
+   |                  ------ required by a bound in this associated function
+...
+   |         M: Event + Send + Sync + 'static,
+   |            ^^^^^ required by this bound in `Inbox::listen`
+   = note: this error originates in the derive macro `Message` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: `Anonymous` does not name the event it records
+  --> tests/compile_fail/inbox_event_without_an_id.rs:31:1
+   |
+31 | #[subscribe(stream = "DEPOSITS", consumer = "booker", inbox = "billing.book", isolation = Serializable)]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ an inbox deduplicates on the identity the payload carries
+   |
+help: the trait `Event` is not implemented for `Anonymous`
+  --> tests/compile_fail/inbox_event_without_an_id.rs:27:1
+   |
+27 | struct Anonymous {
+   | ^^^^^^^^^^^^^^^^
+   = note: add an `EventId` field marked `#[event_id]` to `Anonymous`, set with `EventId::generate()` where the event happens
+help: the trait `Event` is implemented for `DepositPaid`
+  --> tests/compile_fail/inbox_event_without_an_id.rs:9:34
+   |
+ 9 | #[derive(Serialize, Deserialize, Message)]
+   |                                  ^^^^^^^
+note: required by a bound in `Inbox::listen`
+  --> src/inbox.rs
+   |
+   |     pub async fn listen<M, E>(
+   |                  ------ required by a bound in this associated function
+...
+   |         M: Event + Send + Sync + 'static,
+   |            ^^^^^ required by this bound in `Inbox::listen`
+   = note: this error originates in the attribute macro `subscribe` which comes from the expansion of the derive macro `Message` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: `Anonymous` does not name the event it records
+  --> tests/compile_fail/inbox_event_without_an_id.rs:32:63
+   |
+32 | async fn book(tx: &mut EffectTransaction<'_>, event: &Inbound<Anonymous>) -> Result<(), BookingError> {
+   |                                                               ^^^^^^^^^ an inbox deduplicates on the identity the payload carries
+   |
+help: the trait `Event` is not implemented for `Anonymous`
+  --> tests/compile_fail/inbox_event_without_an_id.rs:27:1
+   |
+27 | struct Anonymous {
+   | ^^^^^^^^^^^^^^^^
+   = note: add an `EventId` field marked `#[event_id]` to `Anonymous`, set with `EventId::generate()` where the event happens
+help: the trait `Event` is implemented for `DepositPaid`
+  --> tests/compile_fail/inbox_event_without_an_id.rs:9:34
+   |
+ 9 | #[derive(Serialize, Deserialize, Message)]
+   |                                  ^^^^^^^
+note: required by a bound in `__fundamental_assert_event`
+  --> tests/compile_fail/inbox_event_without_an_id.rs:31:1
+   |
+31 | #[subscribe(stream = "DEPOSITS", consumer = "booker", inbox = "billing.book", isolation = Serializable)]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `__fundamental_assert_event`
+   = note: this error originates in the derive macro `Message` which comes from the expansion of the attribute macro `subscribe` (in Nightly builds, run with -Z macro-backtrace for more info)

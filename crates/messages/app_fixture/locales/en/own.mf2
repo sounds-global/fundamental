@@ -1,0 +1,12 @@
+@locale en
+---
+[panel]
+# The fixture's act, in the app's words.
+save_for_owner = Keep for an owner
+
+[change]
+# The fixture's filter, named by the field it filters.
+any_value = .input {$field :string}
+            .match $field
+            stage {{Any stage}}
+            * {{Any}}

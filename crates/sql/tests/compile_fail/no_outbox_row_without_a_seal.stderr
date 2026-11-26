@@ -1,0 +1,33 @@
+error[E0277]: the trait bound `Unsealed: SealedOutbox` is not satisfied
+  --> tests/compile_fail/no_outbox_row_without_a_seal.rs:33:5
+   |
+33 |     fn pending(_scope: &Self::Scope) -> QueryBuilder<Self, SqlDb, HasLeadingKey> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `SealedOutbox` is not implemented for `Unsealed`
+  --> tests/compile_fail/no_outbox_row_without_a_seal.rs:16:1
+   |
+16 | struct Unsealed {
+   | ^^^^^^^^^^^^^^^
+note: required by a bound in `OutboxRow`
+  --> $WORKSPACE/crates/database/src/outbox/outbox_row.rs
+   |
+   | pub trait OutboxRow<D>: Model + SealedOutbox + BoundTo<D> + Send + Sync
+   |                                 ^^^^^^^^^^^^ required by this bound in `OutboxRow`
+
+error[E0277]: the trait bound `Unsealed: SealedOutbox` is not satisfied
+  --> tests/compile_fail/no_outbox_row_without_a_seal.rs:22:27
+   |
+22 | impl OutboxRow<SqlDb> for Unsealed {
+   |                           ^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `SealedOutbox` is not implemented for `Unsealed`
+  --> tests/compile_fail/no_outbox_row_without_a_seal.rs:16:1
+   |
+16 | struct Unsealed {
+   | ^^^^^^^^^^^^^^^
+note: required by a bound in `OutboxRow`
+  --> $WORKSPACE/crates/database/src/outbox/outbox_row.rs
+   |
+   | pub trait OutboxRow<D>: Model + SealedOutbox + BoundTo<D> + Send + Sync
+   |                                 ^^^^^^^^^^^^ required by this bound in `OutboxRow`

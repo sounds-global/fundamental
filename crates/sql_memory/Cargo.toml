@@ -1,0 +1,32 @@
+[package]
+name = "fundamental_sql_memory"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "The SQL repositories held in memory: a model's rows written, read and queried as YugabyteDB does, for an app's tests in milliseconds."
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_db.workspace = true
+fundamental_sql.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+parking_lot.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+fundamental_macros.workspace = true
+fundamental_encryption.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
+uuid = { workspace = true, features = ["v4"] }
+fundamental_test_containers = { workspace = true, features = ["sql"] }

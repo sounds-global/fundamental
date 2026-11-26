@@ -1,0 +1,5 @@
+error: An encrypted `Secret` field cannot be a key column: it is sealed with a fresh nonce on every write, so a row could never be addressed by it
+  --> tests/compile_fail/no_encrypted_key_column.rs:15:12
+   |
+15 |     token: SecretString,
+   |            ^^^^^^^^^^^^

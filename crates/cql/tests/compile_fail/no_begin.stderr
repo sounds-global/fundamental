@@ -1,0 +1,5 @@
+error[E0599]: no method named `begin` found for reference `&CqlPool` in the current scope
+  --> tests/compile_fail/no_begin.rs:12:18
+   |
+12 |     let _ = pool.begin().await;
+   |                  ^^^^^ method not found in `&CqlPool`

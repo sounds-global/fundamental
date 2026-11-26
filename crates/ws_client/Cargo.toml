@@ -1,0 +1,75 @@
+[package]
+name = "fundamental_ws_client"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Device-side WebSocket transport client for the Fundamental framework: a RemoteSource over one socket, compiling to native (tokio-tungstenite) and the browser (web-sys WebSocket)."
+keywords = ["websocket", "client", "sync", "wasm", "transport"]
+categories = ["network-programming", "asynchronous", "wasm"]
+
+[lib]
+bench = false
+
+[features]
+vault-auth = ["fundamental_keys/keys-hd"]
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[package.metadata.fundamental.wasm-test]
+node = ["lib"]
+
+[dependencies]
+fundamental_core = { workspace = true, features = ["retry"] }
+fundamental_macros.workspace = true
+fundamental_sync.workspace = true
+fundamental_offline.workspace = true
+fundamental_keys.workspace = true
+fundamental_ws_wire.workspace = true
+serde_json.workspace = true
+futures.workspace = true
+tracing.workspace = true
+# `std::time::Instant` panics on wasm32-unknown-unknown.
+web-time.workspace = true
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+tokio = { workspace = true, features = ["rt", "sync", "time"] }
+tokio-tungstenite = { workspace = true, features = ["connect", "rustls-tls-webpki-roots"] }
+parking_lot.workspace = true
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+# Only `sync`: the workspace's `tokio` carries `full`, which does not build for the browser.
+tokio = { version = "1.43", default-features = false, features = ["sync"] }
+gloo-timers = { version = "0.3", features = ["futures"] }
+js-sys = "0.3"
+web-sys = { workspace = true, features = [
+    "WebSocket",
+    "MessageEvent",
+    "CloseEvent",
+    "ErrorEvent",
+    "Event",
+    "BinaryType",
+] }
+
+[dev-dependencies]
+serde.workspace = true
+fundamental_core = { workspace = true, features = ["seeded-entropy"] }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
+fundamental_ws = { workspace = true, features = ["test-support"] }
+fundamental_db.workspace = true
+tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros", "sync", "time", "net", "io-util", "test-util"] }
+trybuild.workspace = true
+
+[target.'cfg(target_arch = "wasm32")'.dev-dependencies]
+wasm-bindgen-test.workspace = true

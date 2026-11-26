@@ -1,0 +1,60 @@
+[package]
+name = "fundamental_nats"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Type-safe NATS messaging for the Fundamental framework: typed pub/sub, request-reply, and JetStream durable messaging over a single async-nats seam."
+keywords = ["nats", "messaging", "pubsub", "jetstream", "async"]
+categories = ["asynchronous", "network-programming"]
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+fundamental_core = { workspace = true, features = ["retry"] }
+fundamental_macros.workspace = true
+fundamental_config.workspace = true
+fundamental_secrets.workspace = true
+fundamental_schema.workspace = true
+fundamental_canonical.workspace = true
+fundamental_observability.workspace = true
+async-nats.workspace = true
+nkeys.workspace = true
+data-encoding.workspace = true
+arc-swap.workspace = true
+rustls.workspace = true
+bytes.workspace = true
+futures.workspace = true
+tokio = { workspace = true }
+tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uuid = { workspace = true, features = ["v4", "v7", "serde"] }
+chrono = { workspace = true, features = ["serde"] }
+parking_lot.workspace = true
+
+[dev-dependencies]
+fundamental_core = { workspace = true, features = ["seeded-entropy"] }
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "test-util"] }
+tracing-subscriber.workspace = true
+tracing-test.workspace = true
+fundamental_test_containers = { workspace = true, features = ["nats", "openbao"] }
+tempfile.workspace = true
+fundamental_observability = { workspace = true, features = ["testing"] }
+toml.workspace = true
+trybuild.workspace = true
+
+[features]
+default = ["jetstream"]
+jetstream = []

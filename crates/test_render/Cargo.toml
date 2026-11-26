@@ -1,0 +1,18 @@
+[package]
+name = "fundamental_test_render"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Render a Leptos view to HTML under the islands' shared context a served page has, and snapshot it with the build-specific parts masked."
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+hydration_context = "0.3"
+insta = "1.49"
+leptos = { workspace = true, features = ["islands", "ssr"] }

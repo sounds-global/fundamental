@@ -1,0 +1,36 @@
+[package]
+name = "fundamental_lease"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Singleton work behind a fencing lease: expiry on the database clock, an epoch that changes only with the holder, fenced transactions whose work runs once, and a surface that renews, hands over and releases."
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[dependencies]
+fundamental_core = { workspace = true, features = ["chrono"] }
+fundamental_macros.workspace = true
+fundamental_db.workspace = true
+fundamental_sql.workspace = true
+fundamental_runtime.workspace = true
+chrono = { workspace = true }
+serde = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true, features = ["v4"] }
+
+[dev-dependencies]
+fundamental_db_migrator = { workspace = true, features = ["sql", "test-support"] }
+fundamental_test_containers = { workspace = true, features = ["sql"] }
+futures = { workspace = true }
+sqlx = { workspace = true }
+tracing-test = { workspace = true, features = ["no-env-filter"] }
+tempfile = { workspace = true }

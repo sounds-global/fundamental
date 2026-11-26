@@ -1,0 +1,71 @@
+[package]
+name = "fundamental_sync_server"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Server-side sync endpoint for the Fundamental framework: an authenticated, per-principal-scoped, rate-limited WebSocket endpoint over the sync wire protocol."
+keywords = ["sync", "server", "websocket", "multi-tenant", "authentication"]
+categories = ["asynchronous", "web-programming", "database"]
+
+[lib]
+bench = false
+
+[features]
+sql = ["dep:sqlx", "dep:fundamental_sql"]
+
+nats = ["dep:fundamental_nats", "fundamental_sync/nats"]
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+fundamental_core = { workspace = true, features = ["json"] }
+fundamental_macros.workspace = true
+fundamental_db.workspace = true
+fundamental_offline.workspace = true
+fundamental_sync.workspace = true
+fundamental_ws.workspace = true
+fundamental_auth.workspace = true
+fundamental_keys = { workspace = true, features = ["keys-hd"] }
+fundamental_runtime = { workspace = true, features = ["ws"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+sqlx = { workspace = true, features = [
+    "runtime-tokio",
+    "tls-rustls-aws-lc-rs",
+    "postgres",
+], optional = true }
+fundamental_sql = { workspace = true, optional = true }
+fundamental_nats = { workspace = true, optional = true }
+tracing.workspace = true
+tokio = { workspace = true, features = ["rt"] }
+getrandom = "0.2"
+subtle.workspace = true
+
+[dev-dependencies]
+fundamental_observability = { workspace = true, features = ["testing"] }
+# Its own features, so the `tests/` gated on `sql` and `nats` do not compile empty.
+fundamental_sync_server = { path = ".", features = ["sql", "nats"] }
+tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros", "time"] }
+fundamental_nats.workspace = true
+fundamental_sync = { workspace = true, features = ["nats"] }
+fundamental_ws_client.workspace = true
+fundamental_ws = { workspace = true, features = ["test-support"] }
+fundamental_config.workspace = true
+fundamental_sql.workspace = true
+fundamental_db.workspace = true
+jsonwebtoken = { workspace = true }
+serde_json.workspace = true
+fundamental_test_containers = { workspace = true, features = ["sql", "nats"] }
+tokio-tungstenite = { workspace = true, features = ["connect"] }
+futures.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true

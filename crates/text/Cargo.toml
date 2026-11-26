@@ -1,0 +1,33 @@
+[package]
+name = "fundamental_text"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Confusable skeletons for the Fundamental framework: UTS #39 folding under a pinned Unicode version, with a fingerprint that makes a table upgrade impossible to apply silently."
+keywords = ["unicode", "uts39", "confusable", "homoglyph", "security"]
+categories = ["text-processing", "internationalization"]
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+# Exact pin: a bump changes UnicodeTables::UTS39 and every stored fingerprint.
+unicode-security = "=0.1.2"
+unicode-normalization.workspace = true
+blake3.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true

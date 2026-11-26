@@ -1,0 +1,5 @@
+error: `#[model(erasable)]` names a column an erasure may clear, which only an outbox seal leaves out; add `#[model(outbox)]` to the struct or remove it
+  --> tests/compile_fail/no_erasable_column_outside_an_outbox.rs:17:5
+   |
+17 |     subject: Option<String>,
+   |     ^^^^^^^

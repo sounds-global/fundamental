@@ -1,0 +1,17 @@
+error: invalid Queue name "layer5.erase": '.' at byte 6 is not allowed — a name is a single token, not a dotted subject; use '_' instead of '.'
+ --> tests/compile_fail/entity_name_with_dot.rs:8:16
+  |
+8 | #[queue(name = "layer5.erase")]
+  |                ^^^^^^^^^^^^^^
+
+error: invalid Stream name "orders.v2": '.' at byte 6 is not allowed — a name is a single token, not a dotted subject; use '_' instead of '.'
+  --> tests/compile_fail/entity_name_with_dot.rs:12:17
+   |
+12 | #[stream(name = "orders.v2")]
+   |                 ^^^^^^^^^^^
+
+error: invalid Consumer name "proc.main": '.' at byte 4 is not allowed — a name is a single token, not a dotted subject; use '_' instead of '.'
+  --> tests/compile_fail/entity_name_with_dot.rs:16:19
+   |
+16 | #[consumer(name = "proc.main")]
+   |                   ^^^^^^^^^^^

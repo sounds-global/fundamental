@@ -1,0 +1,48 @@
+//! The authorization schema: its typed and config front ends, and the IR the engine evaluates.
+
+mod caveat_ir;
+mod caveat_name;
+mod caveat_value;
+mod declared_namespace;
+mod is_false;
+mod loader;
+mod locked_relation;
+mod namespace_ext;
+mod namespace_ir;
+mod namespace_name;
+mod namespace_trait;
+mod refuse_locked_exclusion;
+mod related_type;
+mod relation_ext;
+mod relation_ir;
+mod relation_name;
+mod relation_of;
+mod relation_trait;
+mod rewrite_ir;
+mod schema_builder;
+mod schema_hash;
+mod schema_ir;
+mod schema_macro;
+mod uuid_id;
+
+pub use caveat_ir::{CaveatIr, CaveatOperand, CompareOp};
+pub use caveat_name::CaveatName;
+pub use caveat_value::CaveatValue;
+pub use declared_namespace::declared_namespace;
+pub use loader::SchemaLoader;
+pub use locked_relation::LockedRelation;
+pub use namespace_ext::NamespaceExt;
+pub use namespace_ir::NamespaceIr;
+pub use namespace_name::NamespaceName;
+pub use namespace_trait::Namespace;
+pub use related_type::RelatedType;
+pub use relation_ext::RelationExt;
+pub use relation_ir::RelationIr;
+pub use relation_name::RelationName;
+pub use relation_of::RelationOf;
+pub use relation_trait::Relation;
+pub use rewrite_ir::RewriteIr;
+pub use schema_builder::SchemaBuilder;
+pub use schema_hash::SchemaHash;
+pub use schema_ir::SchemaIr;
+pub use uuid_id::uuid_id;

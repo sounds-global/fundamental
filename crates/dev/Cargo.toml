@@ -1,0 +1,31 @@
+[package]
+name = "fundamental_dev"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "The Fundamental development loop: watch a project's sources, rebuild on change, and supervise the apps under one build graph with graceful restarts."
+keywords = ["development", "watch", "reload", "supervisor", "cargo"]
+categories = ["development-tools"]
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+tracing.workspace = true
+tokio = { workspace = true, features = ["rt", "signal", "macros"] }
+
+[dev-dependencies]
+tempfile.workspace = true

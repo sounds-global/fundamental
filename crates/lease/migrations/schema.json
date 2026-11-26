@@ -1,0 +1,99 @@
+{
+  "parent": "91bff0fcc7d0f8a7bb56bfb57e4368a62058fc856d4183afa13f2e8c4e5051bc",
+  "tables": {
+    "fundamental_lease_work": {
+      "columns": [
+        {
+          "name": "lease",
+          "type": "TEXT"
+        },
+        {
+          "name": "work_key",
+          "type": "TEXT"
+        },
+        {
+          "name": "epoch",
+          "type": "INT8"
+        },
+        {
+          "name": "done_at",
+          "type": "TIMESTAMPTZ"
+        }
+      ],
+      "key": [
+        {
+          "columns": [
+            "lease",
+            "work_key"
+          ],
+          "split": "hash"
+        }
+      ],
+      "indexes": {
+        "fundamental_lease_work_by_age": {
+          "key": [
+            {
+              "columns": [
+                "lease"
+              ],
+              "split": "asc"
+            },
+            {
+              "columns": [
+                "done_at"
+              ],
+              "split": "asc"
+            }
+          ]
+        }
+      },
+      "checks": {
+        "fundamental_lease_work_key_length": "char_length(work_key) BETWEEN 1 AND 200"
+      }
+    },
+    "fundamental_leases": {
+      "columns": [
+        {
+          "name": "name",
+          "type": "TEXT"
+        },
+        {
+          "name": "epoch",
+          "type": "INT8"
+        },
+        {
+          "name": "holder",
+          "type": "UUID",
+          "nullable": true
+        },
+        {
+          "name": "acquired_at",
+          "type": "TIMESTAMPTZ",
+          "nullable": true
+        },
+        {
+          "name": "expires_at",
+          "type": "TIMESTAMPTZ",
+          "nullable": true
+        },
+        {
+          "name": "changed_at",
+          "type": "TIMESTAMPTZ"
+        }
+      ],
+      "key": [
+        {
+          "columns": [
+            "name"
+          ],
+          "split": "hash"
+        }
+      ],
+      "checks": {
+        "fundamental_leases_epoch_positive": "epoch >= 1",
+        "fundamental_leases_held_is_whole": "(holder IS NULL AND acquired_at IS NULL AND expires_at IS NULL) OR (holder IS NOT NULL AND acquired_at IS NOT NULL AND expires_at IS NOT NULL AND acquired_at <= changed_at AND changed_at < expires_at)",
+        "fundamental_leases_name_shape": "name ~ '^[a-z][a-z0-9-]{0,62}$'"
+      }
+    }
+  }
+}

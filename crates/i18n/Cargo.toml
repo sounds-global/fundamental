@@ -1,0 +1,48 @@
+[package]
+name = "fundamental_i18n"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Localization engine for the Fundamental framework: the MessageFormat 2 catalogs of an app's crates, locale negotiation, and a runtime Translator that plugs into fundamental_core's i18n primitives. Pure-Rust and wasm-clean."
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_i18n_keys.workspace = true
+fundamental_messages = { workspace = true }
+icu_decimal.workspace = true
+fixed_decimal.workspace = true
+icu_locale_core.workspace = true
+icu_datetime.workspace = true
+icu_time.workspace = true
+icu_calendar.workspace = true
+icu_plurals.workspace = true
+icu_provider.workspace = true
+chrono.workspace = true
+chrono-tz.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+fundamental_messages_build = { path = "../messages_build" }
+fundamental_messages_fixture = { path = "../messages/fixture" }
+fundamental_messages_app_fixture = { path = "../messages/app_fixture" }
+proptest.workspace = true
+tracing-subscriber.workspace = true
+tracing-test.workspace = true
+
+[build-dependencies]
+fundamental_messages_build = { path = "../messages_build" }
+
+[features]
+default = ["std"]
+std = ["fundamental_core/std"]

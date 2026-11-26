@@ -1,0 +1,44 @@
+[package]
+name = "fundamental_test_containers"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Shared Docker-container fixtures for this workspace's integration tests: one named, reused node per engine, with every test's database, keyspace and stream swept."
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[features]
+default = []
+sql = ["dep:fundamental_sql", "dep:fundamental_db", "fundamental_db/ephemeral"]
+cql = ["dep:fundamental_cql", "dep:fundamental_db", "fundamental_db/ephemeral"]
+nats = ["dep:fundamental_nats", "dep:fundamental_db", "fundamental_db/ephemeral"]
+openbao = ["dep:reqwest", "dep:serde_json"]
+browser = ["dep:reqwest", "dep:serde_json"]
+
+[dependencies]
+fundamental_sql = { workspace = true, features = ["test-support"], optional = true }
+fundamental_cql = { workspace = true, features = ["test-support"], optional = true }
+fundamental_nats = { workspace = true, optional = true }
+fundamental_db = { workspace = true, optional = true }
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+reqwest = { workspace = true, optional = true }
+serde_json = { workspace = true, optional = true }
+
+testcontainers.workspace = true
+bollard.workspace = true
+futures.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "sync", "time", "net", "io-util"] }
+uuid = { workspace = true, features = ["v4"] }
+blake3.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[dev-dependencies]
+# Its own `nats` feature, so the `tests/` gated on it do not compile empty.
+fundamental_test_containers = { path = ".", features = ["nats"] }

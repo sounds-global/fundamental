@@ -1,0 +1,41 @@
+//! Fixtures for tests that own a real YSQL database or schema, behind `test-support`.
+
+mod connect_dedicated;
+mod drop_schema_on;
+mod drop_stale_ephemeral_schemas;
+mod drop_stale_test_databases;
+mod drop_test_database;
+mod drop_test_schema;
+mod first_sweep_in;
+mod is_inlinable;
+mod leased_schema;
+mod pooled_schema_name;
+mod reclaimed_database;
+mod reclaimed_schema;
+mod reclaimed_schema_error;
+mod release_leased_schema;
+mod schema_exists;
+mod schema_pool;
+mod sweep_budget;
+mod sweep_outcome;
+mod sweep_schemas;
+mod try_advisory_lock;
+mod wipe_schema;
+
+pub use drop_stale_ephemeral_schemas::drop_stale_ephemeral_schemas;
+pub use drop_stale_test_databases::{drop_stale_ephemeral_databases, drop_stale_test_databases};
+pub use drop_test_database::drop_test_database;
+pub use drop_test_schema::drop_test_schema;
+use is_inlinable::is_inlinable;
+pub use leased_schema::LeasedSchema;
+pub use pooled_schema_name::PooledSchemaName;
+pub use reclaimed_database::ReclaimedDatabase;
+pub use reclaimed_schema::ReclaimedSchema;
+pub use reclaimed_schema_error::ReclaimedSchemaError;
+pub use release_leased_schema::release_leased_schema;
+pub use schema_exists::schema_exists;
+pub use schema_pool::SchemaPool;
+pub use sweep_budget::SweepBudget;
+pub use sweep_outcome::SweepOutcome;
+pub use sweep_schemas::sweep_schemas;
+pub use wipe_schema::wipe_schema;

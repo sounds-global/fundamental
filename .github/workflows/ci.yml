@@ -1,0 +1,128 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  lint:
+    name: format and lints
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: rustup show active-toolchain || rustup toolchain install
+      - uses: Swatinem/rust-cache@v2
+      - name: system libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev libgtk-3-dev libglib2.0-dev librsvg2-dev libxdo-dev \
+            libayatana-appindicator3-dev libdbus-1-dev libudev-dev libssl-dev pkg-config libtss2-dev
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+
+  test:
+    name: tests
+    runs-on: ubuntu-latest
+    env:
+      CARGO_PROFILE_DEV_DEBUG: "false"
+    steps:
+      # Every test binary of the workspace needs more disk than the runner leaves free.
+      - name: free disk space
+        run: |
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          df -h /
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: rustup show active-toolchain || rustup toolchain install
+      - uses: Swatinem/rust-cache@v2
+      - name: system libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev libgtk-3-dev libglib2.0-dev librsvg2-dev libxdo-dev \
+            libayatana-appindicator3-dev libdbus-1-dev libudev-dev libssl-dev pkg-config libtss2-dev swtpm
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: nextest
+      - run: cargo fetch --locked
+      - run: cargo nextest run --workspace
+      - run: cargo test --doc --workspace --all-features
+
+  docs:
+    name: reference docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: rustup show active-toolchain || rustup toolchain install
+      - uses: Swatinem/rust-cache@v2
+      - name: system libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev libgtk-3-dev libglib2.0-dev librsvg2-dev libxdo-dev \
+            libayatana-appindicator3-dev libdbus-1-dev libudev-dev libssl-dev pkg-config libtss2-dev
+      - run: cargo doc --no-deps --all-features
+        env:
+          RUSTDOCFLAGS: -D warnings
+
+  browser:
+    name: every browser build compiles
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: rustup show active-toolchain || rustup toolchain install
+      - uses: Swatinem/rust-cache@v2
+      - name: each crate with a hydrate feature, for wasm32
+        run: |
+          crates=$(cargo metadata --format-version 1 --no-deps | jq -r '
+            .workspace_members as $members
+            | .packages[] | select(.id as $id | $members | index($id)) | select(.features.hydrate) | .name')
+          for crate in $crates; do
+            cargo check --target wasm32-unknown-unknown -p "$crate" --no-default-features --features hydrate
+          done
+
+  messages:
+    name: every crate's messages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: rustup show active-toolchain || rustup toolchain install
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo run --locked --quiet -p fundamental_cli --bin fun -- messages check --ci
+
+  bench:
+    name: instruction counts within the baseline
+    if: github.event_name == 'pull_request'
+    # arm64: the baseline is `benches/baseline/aarch64.json`.
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: rustup show active-toolchain || rustup toolchain install
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo run --locked --quiet -p fundamental_cli --bin fun -- bench
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: instruction-counts
+          path: target/bench-container/target/gungraun/**/summary.json

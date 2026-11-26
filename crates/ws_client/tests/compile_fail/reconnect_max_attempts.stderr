@@ -1,0 +1,15 @@
+error[E0277]: `reconnect_max_attempts` is removed: a sync session never gives up on its own
+ --> tests/compile_fail/reconnect_max_attempts.rs:6:38
+  |
+6 |         .with_reconnect_max_attempts(Some(10));
+  |          --------------------------- ^^^^^^^^ no value is accepted here
+  |          |
+  |          required by a bound introduced by this call
+  |
+  = help: the trait `ReconnectMaxAttemptsIsRemoved` is not implemented for `std::option::Option<{integer}>`
+  = note: watch `SyncClient::status()` and call `SyncClient::shutdown()` to end a session the app no longer wants
+note: required by a bound in `SyncClientConfig::with_reconnect_max_attempts`
+ --> src/sync_client_config.rs
+  |
+  |     pub fn with_reconnect_max_attempts<Removed: ReconnectMaxAttemptsIsRemoved>(
+  |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `SyncClientConfig::with_reconnect_max_attempts`

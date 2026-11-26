@@ -1,0 +1,86 @@
+[package]
+name = "fundamental_authz"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Native relationship-based authorization (Google Zanzibar / Ory Keto model) for the Fundamental framework: a typed-Rust permission schema, a relation-tuple store over the framework's own backends, and a correct, cycle-safe check engine with per-backend consistency."
+keywords = ["authorization", "authz", "rebac", "zanzibar", "permissions"]
+categories = ["authentication", "database"]
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+uuid.workspace = true
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+fundamental_db.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+futures.workspace = true
+
+fundamental_sql = { workspace = true, optional = true }
+fundamental_cql = { workspace = true, optional = true }
+fundamental_offline = { workspace = true, optional = true }
+# Not `workspace = true`: its `full` features pull `mio`, which breaks the wasm build.
+tokio = { version = "1.43", optional = true, default-features = false, features = ["rt"] }
+
+fundamental_server = { workspace = true, optional = true }
+fundamental_auth = { workspace = true, optional = true }
+
+fundamental_nats = { workspace = true, optional = true }
+
+fundamental_config = { workspace = true, optional = true }
+
+[[test]]
+name = "migrations"
+required-features = ["sql"]
+
+[features]
+default = []
+sql = ["dep:fundamental_sql"]
+cql = ["dep:fundamental_cql"]
+offline = ["dep:fundamental_offline", "dep:tokio"]
+server = ["dep:fundamental_server", "dep:fundamental_auth"]
+service = ["dep:fundamental_nats"]
+config = ["dep:fundamental_config"]
+
+[dev-dependencies]
+# Turns on the features this crate's own `tests/` are gated on; without it they compile to nothing.
+fundamental_authz = { path = ".", features = [
+    "server",
+    "offline",
+    "sql",
+    "cql",
+    "service",
+] }
+fundamental_sql = { workspace = true, features = ["test-support"] }
+fundamental_db_migrator = { workspace = true, features = ["sql", "test-support"] }
+tempfile.workspace = true
+serde_json.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "time"] }
+fundamental_test_containers = { workspace = true, features = [
+    "sql",
+    "cql",
+    "nats",
+] }
+uuid = { workspace = true, features = ["v4"] }
+# `no-env-filter`: the log assertions must not depend on `RUST_LOG`.
+tracing-test = { workspace = true, features = ["no-env-filter"] }
+criterion.workspace = true
+
+[[bench]]
+name = "engine"
+harness = false

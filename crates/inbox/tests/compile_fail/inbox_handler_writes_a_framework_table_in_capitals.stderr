@@ -1,0 +1,5 @@
+error: the table `Fundamental_inbox` is not a table name as the database resolves it: lower-case letters, digits and `_`, starting with a letter or `_`
+ --> tests/compile_fail/inbox_handler_writes_a_framework_table_in_capitals.rs:8:8
+  |
+8 | struct Ledger {
+  |        ^^^^^^

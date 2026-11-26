@@ -1,0 +1,81 @@
+name: bench
+
+on:
+  workflow_dispatch:
+    inputs:
+      layers:
+        description: "Which layers to run (space-separated: wall load soak fault)"
+        required: true
+        default: "wall load soak fault"
+      each:
+        description: "How long each load step is measured"
+        required: true
+        default: "20s"
+      duration:
+        description: "How long the soak runs"
+        required: true
+        default: "10m"
+      save-baseline:
+        description: "Also count instructions on x86_64 and arm64 and upload each baseline"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  layers:
+    name: wall, load, soak and fault
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: rustup show active-toolchain || rustup toolchain install
+      - uses: Swatinem/rust-cache@v2
+      - name: each layer asked for
+        env:
+          LAYERS: ${{ inputs.layers }}
+          EACH: ${{ inputs.each }}
+          DURATION: ${{ inputs.duration }}
+        run: |
+          for layer in $LAYERS; do
+            case "$layer" in
+              wall) cargo run --locked --quiet -p fundamental_cli --bin fun -- bench wall ;;
+              load) cargo run --locked --quiet -p fundamental_cli --bin fun -- bench load --each "$EACH" ;;
+              soak) cargo run --locked --quiet -p fundamental_cli --bin fun -- bench soak --duration "$DURATION" ;;
+              fault) cargo run --locked --quiet -p fundamental_cli --bin fun -- bench fault ;;
+              *) echo "unknown layer: $layer" >&2; exit 2 ;;
+            esac
+          done
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-reports
+          path: |
+            target/bench/**
+            target/criterion/**/new/estimates.json
+            BENCHMARKS.md
+
+  baseline:
+    name: baseline on ${{ matrix.runner }}
+    if: inputs.save-baseline
+    strategy:
+      matrix:
+        runner: [ubuntu-latest, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: rustup show active-toolchain || rustup toolchain install
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo run --locked --quiet -p fundamental_cli --bin fun -- bench --save
+      - uses: actions/upload-artifact@v4
+        with:
+          name: baseline-${{ matrix.runner }}
+          path: benches/baseline/*.json

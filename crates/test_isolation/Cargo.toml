@@ -1,0 +1,28 @@
+[package]
+name = "fundamental_test_isolation"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Refuses an integration test that reaches beyond its own rows while others run beside it: a lease, a schema change or an unconfined job drain outside the tests a project runs alone."
+keywords = ["testing", "isolation", "lint", "parallel"]
+categories = ["development-tools::testing"]
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+syn = { workspace = true, features = ["full", "visit"] }
+proc-macro2 = { workspace = true, features = ["span-locations"] }
+toml.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

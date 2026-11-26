@@ -1,0 +1,51 @@
+[package]
+name = "fundamental_observability"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Process telemetry for the Fundamental framework: one tracing subscriber built from [observability] settings, with optional OTLP export of traces and logs."
+keywords = ["tracing", "observability", "opentelemetry", "otlp", "logging"]
+categories = ["development-tools::debugging"]
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+fundamental_config.workspace = true
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+tracing.workspace = true
+tracing-subscriber = { workspace = true, features = ["json"] }
+uuid = { workspace = true, features = ["v4"] }
+
+opentelemetry = { workspace = true, optional = true }
+opentelemetry_sdk = { workspace = true, optional = true }
+opentelemetry-otlp = { workspace = true, optional = true }
+opentelemetry-appender-tracing = { workspace = true, optional = true }
+tracing-opentelemetry = { workspace = true, optional = true }
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[features]
+default = []
+testing = []
+otlp = [
+    "dep:opentelemetry",
+    "dep:opentelemetry_sdk",
+    "dep:opentelemetry-otlp",
+    "dep:opentelemetry-appender-tracing",
+    "dep:tracing-opentelemetry",
+]
+otlp-grpc = ["otlp", "opentelemetry-otlp/grpc-tonic"]

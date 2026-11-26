@@ -1,0 +1,54 @@
+@locale en
+---
+[panel]
+# The act at the foot of every panel.
+save_for_owner = Save for an owner
+version = .input {$number :integer} {{Version {$number}}}
+pages = .input {$count :integer}
+        .match $count
+        one {{{$count} page}}
+        * {{{$count} pages}}
+greeting = Hello {$name}
+# A word chosen by the text it is given.
+filter = .input {$field :string}
+         .match $field
+         stage {{Any stage}}
+         * {{Any}}
+
+[kind]
+milestone = Milestone
+important_change = Important change
+
+[model.article]
+# An article's name, each form whole.
+one = article
+many = articles
+the = the article
+new_one = new article
+this = this article
+
+[model.article.field]
+headline = Headline
+kind = Kind
+
+[notice]
+# A mail about one notice of a kind, as an app writes it.
+message_subject = New messages in {$scope}
+blocking_subject = A question is waiting in {$scope}
+sign_in_subject = Your sign-in
+body = {$summary}
+
+[change]
+# When a record last changed.
+changed_at = changed {$at}
+counted = .input {$count :integer} {{{$count} {$noun}}}
+# An app may say it with the field it filters.
+any_value = .input {$field} {{All}}
+
+[act]
+do = Do
+
+[brand]
+# Who a mail is from: the installed brand, never spelled here.
+signed = Sent by {name :brand}
+footer = {legal-name :brand} · {site-domain :brand}

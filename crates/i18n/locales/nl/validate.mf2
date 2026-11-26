@@ -1,0 +1,14 @@
+@locale nl
+---
+[validate]
+invalid_email = {$field} moet een geldig e-mailadres zijn
+invalid_url = {$field} moet een geldige URL zijn
+invalid_uuid = {$field} moet een geldige UUID zijn
+not_in_list = {$field} moet een van de volgende zijn: {$allowed}
+not_unique = {$field} bestaat al
+pattern_mismatch = {$field} voldoet niet aan het vereiste patroon
+required = {$field} is verplicht
+too_large = {$field} mag hoogstens {$max} zijn ({$actual} opgegeven)
+too_long = {$field} mag hoogstens {$max} tekens bevatten ({$actual} opgegeven)
+too_short = {$field} moet minstens {$min} tekens bevatten ({$actual} opgegeven)
+too_small = {$field} moet minstens {$min} zijn ({$actual} opgegeven)

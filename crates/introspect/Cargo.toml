@@ -1,0 +1,43 @@
+[package]
+name = "fundamental_introspect"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Introspection surface for the Fundamental framework: exposes a running app's #[action]/#[message] surface as OpenAPI 3.1 / AsyncAPI 3.0 / surface JSON for the standalone dev-tools to fetch."
+keywords = ["openapi", "asyncapi", "introspection", "api", "development-tools"]
+categories = ["web-programming", "development-tools", "development-tools::debugging"]
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+serde.workspace = true
+
+serde_json = { workspace = true, optional = true }
+fundamental_server = { workspace = true, optional = true }
+fundamental_nats = { workspace = true, optional = true }
+fundamental_schema = { workspace = true, optional = true }
+tracing = { workspace = true, optional = true }
+tracing-subscriber = { workspace = true, optional = true }
+
+[features]
+default = []
+ssr = [
+    "dep:serde_json",
+    "dep:fundamental_server",
+    "dep:fundamental_nats",
+    "dep:fundamental_schema",
+    "dep:tracing",
+    "dep:tracing-subscriber",
+]
+
+[dev-dependencies]
+tokio = { workspace = true }

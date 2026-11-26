@@ -1,0 +1,5 @@
+error[E0080]: evaluation panicked: `Billing Book` is not an effect name: [a-z0-9][a-z0-9._-]{0,99}
+  --> tests/compile_fail/inbox_with_an_invalid_effect_name.rs:25:1
+   |
+25 | #[subscribe(stream = "DEPOSITS", consumer = "booker", inbox = "Billing Book", isolation = Serializable)]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ evaluation of `_` failed here

@@ -1,0 +1,51 @@
+[package]
+name = "fundamental_db_migrator"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Migration formatting and execution for the Fundamental framework: generates and runs timestamped migrations from model-derived schema diffs."
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_db.workspace = true
+fundamental_macros.workspace = true
+# Optional per engine, so a YSQL-only app links no CQL driver.
+fundamental_sql = { workspace = true, optional = true }
+fundamental_cql = { workspace = true, optional = true }
+fundamental_offline = { workspace = true, optional = true }
+fundamental_sync = { workspace = true, optional = true }
+chrono.workspace = true
+tracing.workspace = true
+tokio = { workspace = true, features = ["rt", "sync"] }
+
+[features]
+default = []
+sql = ["dep:fundamental_sql"]
+cql = ["dep:fundamental_cql"]
+offline = ["dep:fundamental_offline"]
+sync = ["dep:fundamental_sync", "offline"]
+# Never enabled in a release build.
+test-support = ["fundamental_db/ephemeral", "fundamental_sql?/test-support", "fundamental_cql?/test-support"]
+
+[dev-dependencies]
+fundamental_db_migrator = { path = ".", features = ["sql", "cql", "offline", "sync", "test-support"] }
+fundamental_macros.workspace = true
+tempfile.workspace = true
+fundamental_test_containers = { workspace = true, features = ["sql", "cql"] }
+tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros"] }
+fundamental_db = { workspace = true, features = ["ephemeral"] }
+tracing-subscriber.workspace = true
+tracing-test.workspace = true
+uuid.workspace = true
+fundamental_observability.workspace = true

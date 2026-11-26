@@ -1,0 +1,142 @@
+[package]
+name = "fundamental_web"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Server-rendered web surface for the Fundamental framework: the one place Leptos lives, behind a stable render/island seam, served through the framework-neutral HTTP core."
+keywords = ["web", "ssr", "leptos", "server", "html"]
+categories = ["web-programming", "asynchronous"]
+
+[lib]
+bench = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+# Not the default `ssr`: it reaches `mio`, which does not build for wasm.
+[package.metadata.fundamental.wasm-test]
+default-features = false
+features = ["hydrate", "live"]
+node = ["web_action"]
+
+[features]
+default = ["ssr"]
+ssr = [
+    "leptos/ssr",
+    "leptos/islands",
+    "leptos/nonce",
+    "dep:fundamental_server",
+    "dep:fundamental_api",
+    "dep:fundamental_auth",
+    "dep:fundamental_authz",
+    "dep:tokio",
+    "dep:hydration_context",
+    "dep:futures",
+    "dep:any_spawner",
+    "dep:bytes",
+]
+hydrate = [
+    "leptos/hydrate",
+    "leptos/islands",
+    "dep:wasm-bindgen",
+    "dep:web-sys",
+    "dep:wasm-bindgen-futures",
+    "dep:js-sys",
+    "dep:send_wrapper",
+]
+tauri = ["hydrate"]
+live = [
+    "dep:fundamental_ws_client",
+    "dep:fundamental_offline",
+    "dep:fundamental_sync",
+    "dep:futures",
+]
+
+[dependencies]
+fundamental_core.workspace = true
+fundamental_macros.workspace = true
+leptos.workspace = true
+send_wrapper = { workspace = true, optional = true }
+tracing.workspace = true
+
+fundamental_ws_client = { workspace = true, optional = true }
+fundamental_offline = { workspace = true, optional = true }
+fundamental_sync = { workspace = true, optional = true }
+futures = { workspace = true, optional = true }
+
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+serde_urlencoded.workspace = true
+
+fundamental_server = { workspace = true, optional = true }
+fundamental_api = { workspace = true, optional = true }
+fundamental_auth = { workspace = true, optional = true }
+tokio = { workspace = true, optional = true }
+hydration_context = { workspace = true, optional = true }
+any_spawner = { workspace = true, optional = true }
+bytes = { workspace = true, optional = true }
+fundamental_authz = { workspace = true, optional = true, features = ["server"] }
+
+wasm-bindgen = { version = "0.2", optional = true }
+wasm-bindgen-futures = { version = "0.4", optional = true }
+js-sys = { version = "0.3", optional = true }
+web-sys = { version = "0.3", optional = true, features = [
+    "Document",
+    "Element",
+    "Event",
+    "EventTarget",
+    "Headers",
+    "HtmlAnchorElement",
+    "HtmlHeadElement",
+    "HtmlLinkElement",
+    "Location",
+    "Node",
+    "Request",
+    "RequestCredentials",
+    "RequestInit",
+    "Response",
+    "Window",
+] }
+
+[dev-dependencies]
+leptos = { workspace = true, features = ["islands"] }
+
+fundamental_sync.workspace = true
+
+# Native only: each reaches `ssr`'s `mio`, which does not build for wasm.
+[target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
+# `live` for `tests/use_live_ssr.rs`, which is empty without it.
+fundamental_web = { path = ".", features = ["live"] }
+fundamental_test_browser.workspace = true
+fundamental_sync_server.workspace = true
+fundamental_db.workspace = true
+trybuild.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
+reqwest.workspace = true
+tracing-subscriber.workspace = true
+tracing-test.workspace = true
+
+[target.'cfg(target_arch = "wasm32")'.dev-dependencies]
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+wasm-bindgen-test.workspace = true
+js-sys = "0.3"
+web-sys = { workspace = true, features = [
+    "Document",
+    "Element",
+    "HtmlElement",
+    "Node",
+    "NodeList",
+    "Window",
+    "Event",
+    "EventInit",
+    "MouseEvent",
+] }

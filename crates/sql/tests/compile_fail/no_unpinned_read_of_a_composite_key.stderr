@@ -1,0 +1,15 @@
+error[E0308]: mismatched types
+  --> tests/compile_fail/no_unpinned_read_of_a_composite_key.rs:29:60
+   |
+29 |     let _ = pool.query_executor::<HolderAccount>().execute(&query).await;
+   |                                                    ------- ^^^^^^ expected `&QueryBuilder<HolderAccount, SqlDb, ...>`, found `&QueryBuilder<HolderAccount, SqlDb>`
+   |                                                    |
+   |                                                    arguments to this method are incorrect
+   |
+   = note: expected reference `&fundamental_db::QueryBuilder<HolderAccount, fundamental_core::model::SqlDb, HasLeadingKey>`
+              found reference `&fundamental_db::QueryBuilder<HolderAccount, fundamental_core::model::SqlDb, NoLeadingKey>`
+note: method defined here
+  --> $WORKSPACE/crates/database/src/query/executor.rs
+   |
+   |     fn execute<State>(
+   |        ^^^^^^^

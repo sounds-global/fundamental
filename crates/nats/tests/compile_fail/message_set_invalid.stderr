@@ -1,0 +1,23 @@
+error: MessageSet can only be derived for an enum; each variant carries one message payload
+  --> tests/compile_fail/message_set_invalid.rs:17:8
+   |
+17 | struct NotAnEnum {
+   |        ^^^^^^^^^
+
+error: MessageSet requires at least one variant; an empty set would subscribe to nothing
+  --> tests/compile_fail/message_set_invalid.rs:23:6
+   |
+23 | enum Empty {}
+   |      ^^^^^
+
+error: MessageSet variant `Bare` must be a single-field tuple variant carrying its payload, e.g. `Bare(Payload)`
+  --> tests/compile_fail/message_set_invalid.rs:29:5
+   |
+29 |     Bare,
+   |     ^^^^
+
+error: duplicate subject "events.thing": two variants cannot share a subject, dispatch would be ambiguous
+  --> tests/compile_fail/message_set_invalid.rs:37:17
+   |
+37 |     #[subject = "events.thing"]
+   |                 ^^^^^^^^^^^^^^

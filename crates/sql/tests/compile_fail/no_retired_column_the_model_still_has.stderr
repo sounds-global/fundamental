@@ -1,0 +1,5 @@
+error: a retired column is one the model no longer has; this one it still has
+  --> tests/compile_fail/no_retired_column_the_model_still_has.rs:11:53
+   |
+11 | #[model(sql, table = "articles", retired(columns = ["title"]))]
+   |                                                     ^^^^^^^
